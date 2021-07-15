@@ -51,7 +51,7 @@ calculate Recall, Precision and F1 score for the ensemble experiment (e.g. basel
 store all accuracy as R file "[stock_name]_full_ensemble_model.rda".
 
 
-# customized R functions are defined in 'wiltest.R' file, 'assessment.R' and 'appendix.R' produces visualization and test results
+customized R functions are defined in 'wiltest.R' file, 'assessment.R' and 'appendix.R' produce visualization and test results
 
 
 
