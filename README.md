@@ -4,12 +4,12 @@ Stock project
 The following description is based on the files in folder "code"
 
 # 1. data cleaning
-read in the dataset from .txt file
-select the Dow Jones 30 component stocks of our interest and save each stock as a single R file;
-select the same set of variables for each stock data;
-basic stock price cleaning as stated in the paper in section "Data Manipulation";
-generate FPCA variables for each stock;
-after data cleaning, save each stock price dataset as "[stock_name]_final.rda" file.
+read in the dataset from .txt file;\\
+select the Dow Jones 30 component stocks of our interest and save each stock as a single R file;\\
+select the same set of variables for each stock data;\\
+basic stock price cleaning as stated in the paper in section "Data Manipulation";\\
+generate FPCA variables for each stock;\\
+after data cleaning, save each stock price dataset as "[stock_name]_final.rda" file.\\
 
 # 2. feature construction
 read in read in "[stock_name]_final.rda" file;
