@@ -100,7 +100,7 @@ chmod +x xx.R # replace xx with the proper filename
 ~~~
 
 
-<details><summary>1. data cleaning</summary>
+<details><summary>1. data cleaning (20 hrs)</summary>
 
 - read in the dataset from `.txt file`;
 
@@ -120,7 +120,7 @@ chmod +x xx.R # replace xx with the proper filename
  </details>
 
 
-<details><summary>2. feature construction</summary>
+<details><summary>2. feature construction (3hrs)</summary>
 
 - read in read in `[stock_name]_final.rda` file;
 
@@ -133,7 +133,7 @@ chmod +x xx.R # replace xx with the proper filename
 ~~~
 </details>
 
-<details><summary> 3. experiments with SVM model</summary>
+<details><summary> 3. experiments with SVM model (6 hrs, submit 100 jobs)</summary>
 *note that this job will be submitted 100 times with random seed from 1 to 100*
 
 - read in R file `[stock_name]_to_sample.rda`;
@@ -156,7 +156,7 @@ chmod +x xx.R # replace xx with the proper filename
 </details>
 
 
-<details><summary> 3a. experiments with ELN model </summary>
+<details><summary> 3a. experiments with ELN model (3 hrs, submit 100 jobs)</summary>
 *note that this job will be submitted 100 times with random seed from 1 to 100*
 
 - read in R file `[stock_name]_to_sample.rda`;
@@ -180,7 +180,7 @@ chmod +x xx.R # replace xx with the proper filename
 
 
 
-<details><summary> 4. ensemble results with SVM model </summary>
+<details><summary> 4. ensemble results with SVM model (6 hrs)</summary>
 
 - using loop i equals 1 to 100 and read in data `[stock_name]_i_model_svm.rda`;
 
@@ -198,7 +198,7 @@ chmod +x xx.R # replace xx with the proper filename
 </details>
 
 
-<details><summary> 4a. ensemble results with ELN model </summary>
+<details><summary> 4a. ensemble results with ELN model (3 hrs)</summary>
 
 - using loop i equals 1 to 100 and read in data `[stock_name]_i_model_full.rda`;
 
