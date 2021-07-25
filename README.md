@@ -28,7 +28,6 @@ all the raw datasets from New York Stock Exchange are stored at
     │ 	 ├── asssessment.R			# Wilcoxon Sign Rank Test and Visualizations    
     │ 	 ├── appendix.R		        # Visualizations
     │ 	 ├── wiltest.R		        # Tool box with customized R functions
-    │    ├
     │    ├── data_cleaning.sh		# sh files
     │ 	 ├── feature_encoding.sh					
     │ 	 ├── sample_svm.sh 			
@@ -72,14 +71,14 @@ all the raw datasets from New York Stock Exchange are stored at
     │	     └── EQY_US_ALL_NBBO_DIS.txt 
 </details>
 
-<details><summary>results&intermedia results</summary>
+<details><summary>results & intermedia results</summary>
 
-    ├── intermedia result
+    ├──  intermedia result
     │    ├── [stock_name]_final.rda		    # after cleaning the raw data for each component stock 
     │ 	 ├── [stock_name]_to_sample.rda		# feature construction for each component stock
     │ 	 ├── [stock_name]_i_model_svm.rda 			# single experiments with SVM model for each component stock (i=1,...,100)
     │ 	 ├── [stock_name]_i_model_full.rda			# single experiments with ELN model for each component stock (i=1,...,100)    
-    ├── result 
+    ├──  result 
     │ 	 ├── [stock_name]_svm_ensemble_model.rda			# ensemble 100 results with SVM model for each component stock        	
     │ 	 └── [stock_name]_full_ensemble_model.rda 		    # ensemble 100 results with ELN model for each component stock
 </details>
