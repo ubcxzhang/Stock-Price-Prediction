@@ -1,6 +1,59 @@
 # Novel Modelling of High-frequency Stock Trading Data
+---
 
+## About this project
 Though machine learning-based methods are widely applied in stock mid-price prediction tasks, the feature engineering strategies specialized in high-frequency data are not fully explored. We propose three novel modelling strategies aiming to make better use of high-frequency data and solve the existing data redundancy issues. 
+
+## Directory Layout
+- We assume all the files are in the default directory at **Graham** at 
+~~~
+    . /projects/def-ubcxzh/y2huang/midprice_predict/final_version_2  
+~~~
+
+<details><summary>code</summary>
+
+    ├── code  
+    │        ├── 01_derived_slopes.R		# process phenotype files and derive FEV1 decline slope estimates
+    │ 	 ├── 02_gwas.R 				# applies gwas analysis
+    │ 	 ├── 03_merge_gwas.R 			# merges gwas results from 02_gwas.R
+    │ 	 ├── 04_manhattan.R 			# draws a manhattan plot    
+    │ 	 ├── 05_gwas_topN.R 			# get top N smallest p-value SNPs    
+    │ 	 ├── 06_geno_topN.R 			# get geno for topN SNPs    
+    │ 	 ├── 07_geno_info.R			# get geno info(MAF, REF, ALT, LOC, ...) for topN SNPs    
+    │ 	 ├── 08_genoround.R			# round(hardcall) genotype dosage 			
+    │ 	 ├── 09_geno_LD.R			# LD screening LD for top 10,000 SNPs 			
+    │ 	 ├── 10_multisnp_dat.R			# prepare data for multisnp model(100 repeats) 			
+    │ 	 ├── 11_multisnp.R			# Fit the 5 fold multisnp model for each of 100 repeats
+    │ 	 ├── 12_multisnp_summary.R		# visualize #calls of multisnp model 			
+    │ 	 ├── 13_cv_prediction.R			# calculate prediction mse for multisnp model 			
+    │	 ├── 14_prediction_result.R		# merge results from 13_cv_prediction.R and visualize results	
+    │	 ├── 15_ensemble_model.R		# build ensemble models	
+    │	 ├── 16_eclipse.R			# calculate ECLIPSE scores and exacerbation rate
+    │	 ├── 17_eclipse_derive_slopes.R		# derived outcomes for ECLIPSE
+    │	 ├── 18_pair_visualization.R		# visualize correlation results between scores and outcomes
+    │	 ├── 19_best_model.R			# visualization for manuscript
+    │	 ├── 99_utils.R				# utility functions
+    │        ├
+    │        ├── 01_derived_slopes.sh		# sh files
+    │ 	 ├── 02_gwas.sh					
+    │ 	 ├── 03_merge_gwas.sh 			
+    │ 	 ├── 04_manhattan.sh 			
+    │ 	 ├── 05_gwas_topN.sh 		
+    │ 	 ├── 06_geno_topN.sh 			
+    │ 	 ├── 07_geno_info.sh			
+    │ 	 ├── 08_genoround.sh			
+    │ 	 ├── 09_geno_LD.sh			
+    │ 	 ├── 10_multisnp_dat.sh		
+    │ 	 ├── 11_multisnp.sh			
+    │ 	 ├── 12_multisnp_summary.sh		
+    │ 	 ├── 13_cv_prediction.sh			
+    │	 ├── 14_prediction_result.sh		
+    │	 ├── 15_ensemble_model.sh	
+    │	 ├── 16_eclipse.sh			
+    │	 ├── 17_eclipse_derive_slopes.sh		
+    │	 ├── 18_pair_visualization.sh	
+    │	 └── 19_best_model.sh	
+</details>
 
 
 # 1. data cleaning
