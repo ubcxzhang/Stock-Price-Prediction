@@ -1,7 +1,6 @@
-# stock
+# Novel Modelling of High-frequency Stock Trading Data
 
-Stock project
-The following description is based on the files in folder "code"
+Though machine learning-based methods are widely applied in stock mid-price prediction tasks, the feature engineering strategies specialized in high-frequency data are not fully explored. We propose three novel modelling strategies aiming to make better use of high-frequency data and solve the existing data redundancy issues. 
 
 
 # 1. data cleaning
