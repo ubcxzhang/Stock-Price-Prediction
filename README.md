@@ -9,11 +9,11 @@ Though machine learning-based methods are widely applied in stock mid-price pred
 ## Directory Layout
 - We assume all the codes and intermedia results are in the default directory at **Graham** at 
 ~~~
-    . /projects/def-ubcxzh/y2huang/midprice_predict/final_version_2  
+    project/6003851/y2huang/midprice_predict/final_version_2  
 ~~~
 all the raw datasets from New York Stock Exchange are stored at
 ~~~
-    . /projects/def-ubcxzh/SharedData/NYSE16/GroupingResult/NBBO  
+    /projects/def-ubcxzh/SharedData/NYSE16/GroupingResult/NBBO  
 ~~~
 
 <details><summary>code</summary>
@@ -101,11 +101,10 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 - Before submitting the .sh files, run the following codes in the terminal.
 - Note that the .R files should be writable (can set this up by chmod +x xx.R)
 ~~~
-cd /projects/def-ubcxzh/y2huang/midprice_predict/final_version_2 
+cd project/6003851/y2huang/midprice_predict/final_version_2 
 module load nixpkgs/16.09	
 module load gcc/7.3.0	
-module spider r/3.6.1	
-module load gcccore/.5.4.0	
+module spider r/3.6.1		
 module load r/3.6.1		
 chmod +x xx.R # replace xx with the proper filename
 ~~~
