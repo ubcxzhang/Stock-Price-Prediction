@@ -7,9 +7,13 @@ Though machine learning-based methods are widely applied in stock mid-price pred
 ---
 
 ## Directory Layout
-- We assume all the codes and intermedia results are in the default directory at **Graham** at 
+We assume all the codes and intermedia results are in the default directory at **Graham** at 
 ~~~
     project/6003851/y2huang/midprice_predict/final_version_2  
+~~~
+all the final prediction results of each stock are stored at
+~~~
+    project/6003851/y2huang/midprice_predict/final_version_2/result  
 ~~~
 all the raw datasets from New York Stock Exchange are stored at
 ~~~
