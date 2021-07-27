@@ -6,10 +6,11 @@ args <- commandArgs(trailingOnly = TRUE)
 
 # server <- TRUE 
 # path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
-path0 <- "/projects/def-ubcxzh/y2huang/midprice_predict/thesis"
+# path0 <- "/projects/def-ubcxzh/y2huang/midprice_predict/thesis"
+path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
 setwd(path0)
 source('wiltest.r')
-load('cutoff.rda')
+# load('cutoff.rda')
 options(digits = 6)
 library(dbplyr)
 library(data.table)
@@ -32,7 +33,7 @@ k <- 5
 for(jj in length(char_name)){
  setwd(file.path(path0,'result'))
  char <- char_name[jj] 
- cutoff1 <- as.numeric(cutoff[jj,1])
+ # cutoff1 <- as.numeric(cutoff[jj,1])
  print(char)
 test <- try(load(paste0(char,'_to_sample.rda')))
 if(class(test)%in%"try-error") next
