@@ -7,7 +7,7 @@
 
 module load nixpkgs/16.09 gcc/7.3.0 r/3.6.1
 
-Rscript --vanilla ~/projects/def-ubcxzh/y2huang/midprice_predict/final_version_2/ensemble_ELN.R > ~/projects/def-ubcxzh/y2huang/midprice_predict/final_version_2/result_ELN_nocut/ensemble_ELN.Rout 2>&1
+Rscript --vanilla ~/projects/def-ubcxzh/y2huang/midprice_predict/thesis/ensemble_ELN.R > ~/projects/def-ubcxzh/y2huang/midprice_predict/thesis/result/ensemble_ELN.Rout 2>&1
 
 
  
