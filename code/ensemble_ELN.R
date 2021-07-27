@@ -4,12 +4,13 @@
 rm(list=ls())
 #setwd("/project/6003851/y2huang/midprice_predict")
 # setwd("/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
-server <- TRUE 
-path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
+# server <- TRUE 
+# path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
+path0 <- "/projects/def-ubcxzh/y2huang/midprice_predict/thesis"
 setwd(path0)
 # load('cutoff.rda')
 # for the trail of no cutoff
-setwd(file.path(path0,'result_ELN_nocut'))
+setwd(file.path(path0,'result'))
 # otherwise
 # setwd(file.path(path0,'result'))
 #setwd(file.path(path0,'AAPL'))
