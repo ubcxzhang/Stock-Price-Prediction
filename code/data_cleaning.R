@@ -26,6 +26,7 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
 for(ii in 1:length(char_name)){
   # setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
   # decide which stock to read
+  setwd(file.path(path0))
   char <- char_name[ii]
   print(char)
   print(Sys.time())
