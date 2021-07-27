@@ -7,7 +7,8 @@ args <- commandArgs(trailingOnly = TRUE)
 # setwd("/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
 # server <- TRUE 
 # path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
-path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
+# path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
+path0 <- "/projects/def-ubcxzh/y2huang/midprice_predict/thesis"
 setwd(path0)
 source('wiltest.r')
 options(digits = 6)
