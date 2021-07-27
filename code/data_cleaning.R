@@ -3,7 +3,10 @@
 
 rm(list=ls())
 # set path
-setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
+# path0 is your_working_directory
+path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
+setwd(file.path(path0))
+# setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
 # load packages and sel-defined functions
 library(dbplyr)
 library(data.table)
@@ -21,7 +24,7 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
                'TRV','UNH','UTX','VZ','V','WMT','DIS')
 
 for(ii in 1:length(char_name)){
-  setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
+  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
   # decide which stock to read
   char <- char_name[ii]
   print(char)
@@ -275,7 +278,8 @@ for(ii in 1:length(char_name)){
   }
   
   
-  setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result")
+  setwd(file.path(path0,"result"))
+  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result")
   save(stock,file=paste0(char,'_final.rda'))
   rm(stock)
 }
