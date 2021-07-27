@@ -4,8 +4,8 @@
 rm(list=ls())
 # set path
 # path0 is your_working_directory
-# path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
-path0 <- "projects/def-ubcxzh/y2huang/midprice_predict/thesis"
+ path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
+# path0 <- "projects/def-ubcxzh/y2huang/midprice_predict/thesis"
 setwd(file.path(path0))
 # setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
 # load packages and sel-defined functions
