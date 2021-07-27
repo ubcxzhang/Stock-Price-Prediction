@@ -7,7 +7,7 @@
 
 module load nixpkgs/16.09 gcc/7.3.0 r/3.6.1
 
-Rscript --vanilla ~/project/6003851/y2huang/midprice_predict/thesis/data_cleaning.R > ~/project/6003851/y2huang/midprice_predict/thesis/result/data_cleaning.Rout 2>&1
+Rscript --vanilla ~/projects/def-ubcxzh/y2huang/midprice_predict/thesis/data_cleaning.R > ~/projects/def-ubcxzh/y2huang/midprice_predict/thesis/result/data_cleaning.Rout 2>&1
 
 
  
