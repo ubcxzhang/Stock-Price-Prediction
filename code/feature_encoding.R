@@ -2,6 +2,7 @@
 ###-------------------------------------------
 
 rm(list=ls())
+path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
 
 # Don Jones 30 component stocks
 char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM',
@@ -9,8 +10,8 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
                'TRV','UNH','UTX','VZ','V','WMT','DIS')
 
 for(kk in 1:length(char_name)){
-
-  setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result")
+  setwd(file.path(path0,"result"))
+  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result")
   library(dbplyr)
   library(data.table)
   library(glmnet)
@@ -172,7 +173,7 @@ for(kk in 1:length(char_name)){
                        'dev_bid_p','dev_ask_p','dev_bid_v','dev_ask_v','dev_mid_p')
   
  # when you have done the test, should disable the following relocation 
-  setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result_test")
+  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result_test")
   save(stock,features,names_mfeatures,file=paste0(char,'_to_sample.rda'))
 }
 
