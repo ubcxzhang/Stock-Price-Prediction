@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -J BV1
-#SBATCH --account=rrg-ubcxzh
+#SBATCH --account=def-ubcxzh
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=40G
 #SBATCH -t 0-02:58:00
