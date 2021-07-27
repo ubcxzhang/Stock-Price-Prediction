@@ -4,8 +4,9 @@ rm(list=ls())
 args <- commandArgs(trailingOnly = TRUE)
 
 
-server <- TRUE 
-path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
+# server <- TRUE 
+# path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
+path0 <- "/projects/def-ubcxzh/y2huang/midprice_predict/thesis"
 setwd(path0)
 source('wiltest.r')
 load('cutoff.rda')
@@ -133,7 +134,7 @@ F_test <- F_test[which(1:nrow(F_test)%%k==0),]
     }
   }
   
-  setwd(file.path(path0,'result_ELN_nocut'))
+  setwd(file.path(path0,'result'))
   # setwd(file.path(path0,'result'))
   
   ###################################################
