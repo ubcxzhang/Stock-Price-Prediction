@@ -142,7 +142,7 @@ module load r/4.0.2
 ~~~
 4. before we run the .sh files, we use in the following commands in R (version 4.0.2) to install some R packages needed for the task
 ~~~
-install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr', 'MTPS', 'Matrix'))
+install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr', 'MTPS', 'Matrix', 'tidyr'))
 ~~~
 
 ---
