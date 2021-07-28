@@ -152,7 +152,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
 - To run the files, submit .sh files with an order of 1. data cleaning.R to 4a. ensemble results with ELN model.R
 - Always submit your job under [your_directory] instead of any of the subdirectory
-- For example, ./sh/xx.sh runs ./code/xx.R and saves the results at ./result/xx.
+- For example, ./sh/xx.sh runs ./code/xx.R, saves the results at ./result/xx and the log files at ./rout/xx.
 
 <details><summary>1. data cleaning (12 hrs)</summary>
 
@@ -187,7 +187,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 ~~~
 </details>
 
-<details><summary> 3. experiments with SVM model (3 hrs, submit 100 jobs)</summary>
+<details><summary> 3. experiments with SVM model (8 hrs, submit 100 jobs)</summary>
 *note that this job will be submitted 100 times with random seed from 1 to 100*
 
 - read in R file `[stock_name]_to_sample.rda`;
