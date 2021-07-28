@@ -142,7 +142,7 @@ module load r/4.0.2
 ~~~
 4. before we run the .sh files, we use in the following commands in R (version 4.0.2) to install some R packages needed for the task
 ~~~
-install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr', 'MTPS'))
+install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr', 'MTPS', 'Matrix'))
 ~~~
 
 ---
@@ -154,121 +154,125 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 - Always submit your job under [your_directory] instead of any of the subdirectory
 - For example, ./sh/xx.sh runs ./code/xx.R, saves the results at ./result/xx and the log files at ./rout/xx.
 
+
 <details><summary>1. data cleaning (12 hrs)</summary>
 
-- read in the dataset from `.txt file`;
+- read in the raw dataset from `/projects/def-ubcxzh/SharedData/NYSE16/GroupingResult/NBBO/`, load './rda/date.rda' and './code/wiltest.r';
 
-- select the Dow Jones 30 component stocks of our interest and save each stock as a single R file;
+    - select the Dow Jones 30 component stocks of our interest and save each stock as a single R file;
 
-- select the same set of variables for each stock data;
+    - select the same set of variables for each stock data;
 
-- basic stock price cleaning as stated in the paper in section "Data Manipulation";
+    - basic stock price cleaning as stated in the paper in section "Data Manipulation";
 
-- generate FPCA variables for each stock;
+    - generate FPCA variables for each stock;
 
-- after data cleaning, save each stock price dataset as `[stock_name]_final.rda` file.
+- after data cleaning, save each stock price dataset as `./result/[stock_name]_final.rda` file.
 
-~~~
-    sbatch data_cleaning.sh
-~~~
  </details>
+ 
+ ~~~
+    sbatch ./sh/data_cleaning.sh
+~~~
 
 
 <details><summary>2. feature construction (3hrs)</summary>
 
-- read in read in `[stock_name]_final.rda` file;
+- read in read in `./result/[stock_name]_final.rda` file;
 
-- create all variables listed in "Multi-resolution Features Construction" in our paper except FPCAs;
+    - create all variables listed in "Multi-resolution Features Construction" in our paper except FPCAs;
 
-- save new R file `[stock_name]_to_sample.rda` file.
-    
-~~~
-    sbatch feature_encoding.sh
-~~~
+- save new R file `./result/[stock_name]_to_sample.rda` file.
+
 </details>
+
+~~~
+    sbatch ./sh/feature_encoding.sh
+~~~
+
 
 <details><summary> 3. experiments with SVM model (8 hrs, submit 100 jobs)</summary>
-*note that this job will be submitted 100 times with random seed from 1 to 100*
+**note that this job will be submitted 100 times with random seed i from 1 to 100**
 
-- read in R file `[stock_name]_to_sample.rda`;
+- read in R file `./result/[stock_name]_to_sample.rda`;
 
-- label the response variable (stock mid-price movement);
+    - label the response variable (stock mid-price movement);
 
-- read in random seed i, subsample sample of 10,000 obs with 8,000 training set and 2,000 testing set;
+    - read in random seed i, subsample sample of 10,000 obs with 8,000 training set and 2,000 testing set;
 
-- data winsorization and standardization;
+    - data winsorization and standardization;
 
-- conduct experiments: baseline model without ensemble/baseline model without FPCA/baseline model without "within-window" features;
+    - conduct experiments: baseline model without ensemble/baseline model without FPCA/baseline model without "within-window" features;
 
-- calculate Recall, Precision and F1 score for each experiment above;
+    - calculate Recall, Precision and F1 score for each experiment above;
 
-- save file `[stock_name]_i_model_svm.rda`.
-
- ~~~
-    sbatch sample_svm.sh
- ~~~
+- save file `./result/[stock_name]_i_model_svm.rda`.
+    
 </details>
 
+ ~~~
+    for ii in {1..100}; do sbatch ./sh/sample_svm.sh $ii; done
+ ~~~
 
 <details><summary> 3a. experiments with ELN model (3 hrs, submit 100 jobs)</summary>
-*note that this job will be submitted 100 times with random seed from 1 to 100*
+**note that this job will be submitted 100 times with random seed from 1 to 100**
 
-- read in R file `[stock_name]_to_sample.rda`;
+- read in R file `./result/[stock_name]_to_sample.rda`;
 
-- label the response variable (stock mid-price movement);
+    - label the response variable (stock mid-price movement);
 
-- read in random seed i, subsample sample of 10,000 obs with 8,000 training set and 2,000 testing set;
+    - read in random seed i, subsample sample of 10,000 obs with 8,000 training set and 2,000 testing set;
 
-- data winsorization and standardization;
+    - data winsorization and standardization;
 
-- conduct experiments: baseline ELN model without ensemble;
+    - conduct experiments: baseline ELN model without ensemble;
 
-- calculate Recall, Precision and F1 score with the application of manually defined function "get Accuracy" from "wiltest.r";
+    - calculate Recall, Precision and F1 score with the application of manually defined function "get Accuracy" from "wiltest.r";
 
-- save file `[stock_name]_i_model_full.rda`.
+- save file `./result/[stock_name]_i_model_full.rda`.
 
- ~~~
-    sbatch sample_ELN_full.sh
- ~~~  
 </details>
 
+~~~
+    for ii in {1..100}; do sbatch ./sh/sample_ELN_full.sh $ii; done
+ ~~~  
 
 
 <details><summary> 4. ensemble results with SVM model (6 hrs)</summary>
 
-- using loop i equals 1 to 100 and read in data `[stock_name]_i_model_svm.rda`;
+- using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_svm.rda`;
 
-- skip experiments that don't have converged results;
+    - skip experiments that don't have converged results;
 
-- use the voting scheme to make final predictions;
+    - use the voting scheme to make final predictions;
 
-- calculate Recall, Precision and F1 score for each ensemble experiment (e.g. baseline model/baseline model without FPCAs/baseline model without "within-window" vars);
+    - calculate Recall, Precision and F1 score for each ensemble experiment (e.g. baseline model/baseline model without FPCAs/baseline model without "within-window" vars);
 
-- store all accuracy as R file `[stock_name]_svm_ensemble_model.rda`.
+- store all accuracy as R file `./result/[stock_name]_svm_ensemble_model.rda`.
     
-~~~
-    sbatch ensemble_svm.sh
-~~~ 
 </details>
 
+~~~
+    sbatch ./sh/ensemble_svm.sh
+~~~ 
 
 <details><summary> 4a. ensemble results with ELN model (3 hrs)</summary>
 
-- using loop i equals 1 to 100 and read in data `[stock_name]_i_model_full.rda`;
+- using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_full.rda`;
 
-- skip experiments that don't have converged results;
+    - skip experiments that don't have converged results;
 
-- use the voting scheme to make final predictions;
+    - use the voting scheme to make final predictions;
 
-- calculate Recall, Precision and F1 score for the ensemble experiment (e.g. baseline model with ELN);
+    - calculate Recall, Precision and F1 score for the ensemble experiment (e.g. baseline model with ELN);
 
-- store all accuracy as R file `[stock_name]_full_ensemble_model.rda`.
+- store all accuracy as R file `./result/[stock_name]_full_ensemble_model.rda`.
         
-~~~
-    sbatch ensemble_ELN.sh
-~~~ 
 </details>
 
+~~~
+    sbatch ./sh/ensemble_ELN.sh
+~~~ 
 
 customized R functions are defined in `wiltest.R` file, `assessment.R` and `appendix.R` produce visualizations and test results, which can be run on local server
 
