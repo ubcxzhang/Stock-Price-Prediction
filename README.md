@@ -211,9 +211,6 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
     
 </details>
 
- ~~~
-    for ii in {1..100}; do sbatch ./sh/sample_svm.sh $ii; done
- ~~~
 
 <details><summary> 3a. experiments with ELN model (3 hrs, submit 100 jobs)</summary>
 **note that this job will be submitted 100 times with random seed from 1 to 100**
@@ -235,6 +232,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 </details>
 
 ~~~
+    for ii in {1..100}; do sbatch ./sh/sample_svm.sh $ii; done
     for ii in {1..100}; do sbatch ./sh/sample_ELN_full.sh $ii; done
  ~~~  
 
@@ -253,9 +251,6 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
     
 </details>
 
-~~~
-    sbatch ./sh/ensemble_svm.sh
-~~~ 
 
 <details><summary> 4a. ensemble results with ELN model (3 hrs)</summary>
 
@@ -272,6 +267,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 </details>
 
 ~~~
+    sbatch ./sh/ensemble_svm.sh
     sbatch ./sh/ensemble_ELN.sh
 ~~~ 
 
