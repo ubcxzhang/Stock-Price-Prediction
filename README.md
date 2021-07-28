@@ -5,8 +5,8 @@
 Though machine learning-based methods are widely applied in stock mid-price prediction tasks, the feature engineering strategies specialized in high-frequency data are not fully explored. We propose three novel modelling strategies aiming to make better use of high-frequency data and solve the existing data redundancy issues. 
 
 ---
-
 ## Directory Layout
+![image](https://github.com/ubcxzhang/Stock-Price-Prediction/blob/master/illustration.png)
 
 We assume the user set the default directory at **Graham** at Compute Canada
 ~~~
@@ -52,7 +52,17 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── ensemble_ELN.R			# ensemble 100 results with ELN model    
     │ 	 ├── asssessment.R			# Wilcoxon Sign Rank Test and Visualizations    
     │ 	 ├── appendix.R		        # Visualizations
-    │ 	 ├── wiltest.R		        # Tool box with customized R functions
+    │ 	 └── wiltest.R		        # Tool box with customized R functions					
+</details>
+<details><summary>rda</summary>
+
+    ├── rda    
+    │ 	 ├── date.rda		        # a file that records the trading dates
+    │ 	 └── dj30.rda		        # a dataset to reproduce graph in the paper 					
+</details>
+<details><summary>sh</summary>
+
+    ├── sh  
     │    ├── data_cleaning.sh		# sh files
     │ 	 ├── feature_encoding.sh					
     │ 	 ├── sample_svm.sh 			
@@ -60,10 +70,31 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── ensemble_svm.sh		
     │ 	 └── ensemble_ELN.sh 				
 </details>
+<details><summary>rout</summary>
 
-<details><summary>data</summary>
+    ├──  log files after submitting jobs
+    │    ├── data_cleaning.Rout		    # log file for data_cleaning.sh
+    │ 	 ├── feature_encoding.Rout		# log file for feature_encoding.sh
+    │ 	 ├── sample_svm.i.Rout 			# log file for sample_svm.sh for each seed i (i=1,...,100)
+    │ 	 ├── sample_ELN_full.i.Rout	    # log file for sample_ELN_full.sh for each seed i (i=1,...,100)     
+    │ 	 ├── ensemble_svm.Rout			# log file for ensemble_svm.sh        	
+    │ 	 └── ensemble_ELN.Rout 		    # log file for ensemble_ELN.sh
+</details>
+<details><summary>results (final & intermedia results)</summary>
+
+    ├──  intermedia result
+    │    ├── [stock_name]_final.rda		    # after cleaning the raw data for each component stock 
+    │ 	 ├── [stock_name]_to_sample.rda		# feature construction for each component stock
+    │ 	 ├── [stock_name]_i_model_svm.rda 			# single experiments with SVM model for each component stock (i=1,...,100)
+    │ 	 ├── [stock_name]_i_model_full.rda			# single experiments with ELN model for each component stock (i=1,...,100)    
+    ├──  final result 
+    │ 	 ├── [stock_name]_svm_ensemble_model.rda			# ensemble 100 results with SVM model for each component stock        	
+    │ 	 └── [stock_name]_full_ensemble_model.rda 		    # ensemble 100 results with ELN model for each component stock
+</details>
+
+<details><summary>raw data</summary>
     
-    ├── data
+    ├── raw data
     │        ├── EQY_US_ALL_NBBO_AAPL.txt
     │        ├── EQY_US_ALL_NBBO_MSFT.txt		
     │        ├── EQY_US_ALL_NBBO_MMM.txt		
@@ -96,46 +127,33 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │	     └── EQY_US_ALL_NBBO_DIS.txt 
 </details>
 
-<details><summary>results & intermedia results</summary>
 
-    ├──  intermedia result
-    │    ├── [stock_name]_final.rda		    # after cleaning the raw data for each component stock 
-    │ 	 ├── [stock_name]_to_sample.rda		# feature construction for each component stock
-    │ 	 ├── [stock_name]_i_model_svm.rda 			# single experiments with SVM model for each component stock (i=1,...,100)
-    │ 	 ├── [stock_name]_i_model_full.rda			# single experiments with ELN model for each component stock (i=1,...,100)    
-    ├──  result 
-    │ 	 ├── [stock_name]_svm_ensemble_model.rda			# ensemble 100 results with SVM model for each component stock        	
-    │ 	 └── [stock_name]_full_ensemble_model.rda 		    # ensemble 100 results with ELN model for each component stock
-</details>
 
 ---
-
-## Package Dependencies
-- Before running the .sh files, some packages should be installed.
-- `wiltest.R` should be loaded to introduce the self-defined functions
+## Before you start
+1. decide your directory to replicate our results;
+2. create the subdirectories **code**, **rda**, **sh**, **rout**, **result**, **figure**；
+3. in the main directory, type the following codes to load R/4.0.2 language in Compute Canada:
+~~~
+module load nixpkgs/16.09	
+module load gcc/7.3.0	
+module spider r/4.0.2	
+module load r/4.0.2	
+~~~
+4. before we run the .sh files, we type in the following codes in R (version 4.0.2) to install some R packages needed for the task
 ~~~
 install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr'))
 ~~~
 
 ---
 
-## Running files (estimated times per 1 job)
+
+## Running files (estimated time per job)
 
 - To run the files, submit .sh files with an order of 1. data cleaning.R to 4a. ensemble results with ELN model.R
 - For example, xx.sh runs xx.R and saves the results at result/xx.
-- Before submitting the .sh files, run the following codes in the terminal.
-- Note that the .R files should be writable (can set this up by chmod +x xx.R)
-~~~
-cd project/6003851/y2huang/midprice_predict/final_version_2 
-module load nixpkgs/16.09	
-module load gcc/7.3.0	
-module spider r/3.6.1		
-module load r/3.6.1		
-chmod +x xx.R # replace xx with the proper filename
-~~~
 
-
-<details><summary>1. data cleaning (20 hrs)</summary>
+<details><summary>1. data cleaning (12 hrs)</summary>
 
 - read in the dataset from `.txt file`;
 
@@ -168,7 +186,7 @@ chmod +x xx.R # replace xx with the proper filename
 ~~~
 </details>
 
-<details><summary> 3. experiments with SVM model (6 hrs, submit 100 jobs)</summary>
+<details><summary> 3. experiments with SVM model (3 hrs, submit 100 jobs)</summary>
 *note that this job will be submitted 100 times with random seed from 1 to 100*
 
 - read in R file `[stock_name]_to_sample.rda`;
