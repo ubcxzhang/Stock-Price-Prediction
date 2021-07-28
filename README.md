@@ -7,15 +7,35 @@ Though machine learning-based methods are widely applied in stock mid-price pred
 ---
 
 ## Directory Layout
-We assume all the codes and intermedia results are in the default directory at **Graham** at 
+We assume the user set the default directory at **Graham** at Compute Canada
 ~~~
-    project/6003851/y2huang/midprice_predict/final_version_2  
+    project/6003851/[your_deirctory]  
 ~~~
-all the final prediction results of each stock are stored at
+all the R codes are in the subdirectory directory at **code** 
+~~~
+    project/6003851/[your_deirctory]/code  
+~~~
+all additional data to produce graphs except for the NYSE stock dataset are in the subdirectory directory at **rda** 
+~~~
+    project/6003851/[your_deirctory]/rda  
+~~~
+all the .sh files that run the R files are in the subdirectory directory at **sh** 
+~~~
+    project/6003851/[your_deirctory]/sh  
+~~~
+all the log files are in the subdirectory directory at **rout** 
+~~~
+    project/6003851/[your_deirctory]/rout  
+~~~
+all the final prediction results/intermedia results are in the subdirectory directory at **result** 
 ~~~
     project/6003851/y2huang/midprice_predict/final_version_2/result  
 ~~~
-all the raw datasets from New York Stock Exchange are stored at
+all the graphs in the paper are in the subdirectory directory at **figure** 
+~~~
+    project/6003851/y2huang/midprice_predict/final_version_2/figure  
+~~~
+all the **raw datasets** from New York Stock Exchange are stored at, which are accessible to all group members
 ~~~
     /projects/def-ubcxzh/SharedData/NYSE16/GroupingResult/NBBO  
 ~~~
