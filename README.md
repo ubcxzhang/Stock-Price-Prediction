@@ -7,6 +7,7 @@ Though machine learning-based methods are widely applied in stock mid-price pred
 ---
 
 ## Directory Layout
+
 We assume the user set the default directory at **Graham** at Compute Canada
 ~~~
     project/6003851/[your_deirctory]  
