@@ -93,7 +93,7 @@ all the raw datasets from New York Stock Exchange are stored at
 - Before running the .sh files, some packages should be installed.
 - `wiltest.R` should be loaded to introduce the self-defined functions
 ~~~
-install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics'))
+install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr'))
 ~~~
 
 ---
