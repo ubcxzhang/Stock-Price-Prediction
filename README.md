@@ -131,18 +131,18 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
 
 ---
 ## Before you start
-1. decide your directory to replicate our results;
-2. create the subdirectories **code**, **rda**, **sh**, **rout**, **result**, **figure**；
-3. in the main directory, type the following codes to load R/4.0.2 language in Compute Canada:
+1. decide the path of [your_directory] to replicate our results;
+2. create the subdirectories **code**, **rda**, **sh**, **rout**, **result**, **figure** at [your_directory]；
+3. in the main directory, use the following commands to load R/4.0.2 language in Compute Canada:
 ~~~
 module load nixpkgs/16.09	
 module load gcc/7.3.0	
 module spider r/4.0.2	
 module load r/4.0.2	
 ~~~
-4. before we run the .sh files, we type in the following codes in R (version 4.0.2) to install some R packages needed for the task
+4. before we run the .sh files, we use in the following commands in R (version 4.0.2) to install some R packages needed for the task
 ~~~
-install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr'))
+install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBrewer','bit64', 'reshape2','graphics', 'e1071', 'caret', 'stringr', 'MTPS'))
 ~~~
 
 ---
@@ -151,7 +151,8 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 ## Running files (estimated time per job)
 
 - To run the files, submit .sh files with an order of 1. data cleaning.R to 4a. ensemble results with ELN model.R
-- For example, xx.sh runs xx.R and saves the results at result/xx.
+- Always submit your job under [your_directory] instead of any of the subdirectory
+- For example, ./sh/xx.sh runs ./code/xx.R and saves the results at ./result/xx.
 
 <details><summary>1. data cleaning (12 hrs)</summary>
 
