@@ -192,7 +192,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 ~~~
 
 
-<details><summary> 3. experiments with SVM model (8 hrs, submit 100 jobs)</summary>
+<details><summary> 3. experiments with SVM model (3 hrs, submit 100 jobs)</summary>
 **note that this job will be submitted 100 times with random seed i from 1 to 100**
 
 - read in R file `./result/[stock_name]_to_sample.rda`;
@@ -252,7 +252,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 </details>
 
 
-<details><summary> 4a. ensemble results with ELN model (3 hrs)</summary>
+<details><summary> 4a. ensemble results with ELN model (6 hrs)</summary>
 
 - using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_full.rda`;
 
