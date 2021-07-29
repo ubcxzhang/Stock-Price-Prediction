@@ -237,7 +237,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
  ~~~  
 
 
-<details><summary> 4. ensemble results with SVM model (6 hrs)</summary>
+<details><summary> 4. ensemble results with SVM model (3 hrs)</summary>
 
 - using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_svm.rda`;
 
