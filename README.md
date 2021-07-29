@@ -239,7 +239,8 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
  ~~~  
 
 
-<details><summary> 4. ensemble results with SVM model (3 hrs)</summary>
+<details><summary> 4. ensemble results with SVM model (6 hrs, submit 30 jobs)</summary>
+    **# SVM model ensemble is too slow, divide it into 30 separate jobs representing 30 targeted stocks**
 
 - using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_svm.rda`;
 
@@ -269,7 +270,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 </details>
 
 ~~~
-    sbatch ./sh/ensemble_svm.sh
+    for ii in {1..30}; do sbatch ./sh/ensemble_svm.sh $ii; done
     sbatch ./sh/ensemble_ELN.sh
 ~~~ 
 
