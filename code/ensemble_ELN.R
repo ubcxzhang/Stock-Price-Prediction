@@ -137,7 +137,7 @@ for(k in 1:length(flag)){
 
 
 time_ELN <- print(Sys.time()-time)
-save(Accuracy_sum_ELN,model_sum,test_sum,Accuracy_sum_ensem_ELN,time_ELN,file=paste0('./result/',char,'_full_ensemble_model.rda'))
+save(Accuracy_sum_ELN,model_sum,test_sum,Accuracy_sum_ensem_ELN,time_ELN,flag, file=paste0('./result/',char,'_full_ensemble_model.rda'))
 
 
 }
