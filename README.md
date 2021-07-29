@@ -133,7 +133,9 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
 ## Before you start
 1. decide the path of [your_directory] to replicate our results;
 2. create the subdirectories **code**, **rda**, **sh**, **rout**, **result**, **figure** at [your_directory]；
-3. in the main directory, use the following commands to load R/4.0.2 language in Compute Canada:
+3. allocate all relevant files into each subdirectory as the figure below:
+![image2]()
+5. in the main directory, use the following commands to load R/4.0.2 language in Compute Canada:
 ~~~
 module load nixpkgs/16.09	
 module load gcc/7.3.0	
