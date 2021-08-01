@@ -292,9 +292,6 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
 customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix_table.R` produce visualizations and test results, which can be run on local server
 
-~~~
-    sbatch ./sh/figure.sh
-~~~ 
 <details><summary> 5. generating figures in the paper (10 mins)</summary>
 - read in data `./rda/dow_jones30_daily.csv`;
 
@@ -330,7 +327,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 </details>
 
 ~~~
-    sbatch ./sh/appendix_table.sh
+    sbatch ./sh/figure.sh
 ~~~ 
 <details><summary> 6. produces tables in the paper (4 hrs)</summary>
 **All the table results output are in latex format, they are printed in the log file at './rout/appendix_table.Rout'**
@@ -342,7 +339,9 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 - produces appendix tables showing the summary statistics of the whole features of the full sample.
         
 </details>
-
+~~~
+    sbatch ./sh/appendix_table.sh
+~~~ 
 
 
 
