@@ -150,6 +150,7 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
 1. decide the path of [your_directory] to replicate our results;
 2. create the subdirectories **code**, **rda**, **sh**, **rout**, **result**, **figure** at [your_directory]；
 3. allocate all relevant files into each subdirectory. The **rout**, **result** and **figure** folders will be empty at the beginning while the **code**, **sh** and **rda** folders should look like the figure below:
+
 ![image2](https://github.com/ubcxzhang/Stock-Price-Prediction/blob/master/illustration2.png)
 5. in the main directory, use the following commands to load R/4.0.2 language in Compute Canada:
 ~~~
