@@ -29,6 +29,36 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
                'WBA','GS','HD','INTC','IBM','JNJ','JPM','MCD','MRK','NKE','PFE','PG',
                'TRV','UNH','UTX','VZ','V','WMT','DIS')
 
+###################illstration of DJ 30 index daily trend#######################
+daily <- read.csv("./rda/dow_jones30_daily.csv", stringsAsFactors=F)
+daily$Adj.Close <- as.numeric(gsub(",","", daily$Adj.Close))
+daily$Date <- as.Date(daily$Date, format="%d-%b-%y")
+
+pdf(file='./figure/dj30.pdf',width=10,height=7)
+dj30 <- ggplot(daily,aes(Date,Adj.Close)) + 
+  geom_line(aes(color="red")) +
+  # ggtitle("Closing Stock Price: Dow Jones 30 Index") + 
+  theme(plot.title = element_text(face='bold', colour='black', hjust=0.5, size=24))+
+  theme(axis.title.x = element_text())+
+  theme(axis.title.y = element_text())+
+  ylab("Closing Stock Price (Currency in USD)")+
+  xlab("Date")+
+  theme(panel.background = element_rect(fill = "white",
+                                        colour = "light gray",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "light gray"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "light gray"), 
+        axis.text.y= element_text(angle=0, hjust=1, face = "bold",size=10),
+        axis.text.x = element_text(face = "bold", angle=45,size=15),
+        axis.ticks = element_blank(),
+        strip.text.y = element_text(size = 30, colour = "black", angle = -90, face = "bold", hjust=0.5))+
+        theme(legend.position="none")
+dj30
+dev.off()
+
+
 
 
 ###################SVM picture 1#######################
@@ -213,7 +243,7 @@ color1 <- c(rep("#9ECAE1",90))
 color2 <- c(rep("#7EC0EE",90))
 color1[c(3*(pos3-1)+1,3*(pos1-1)+2,3*pos2)] <- "#ADADAD"
 color2[c(3*(pos3-1)+1,3*(pos1-1)+2,3*pos2)] <- "#A8A8A8"
-pdf(file='./figure/ensemble_ELN_SVM_plot.pdf',width=6,height=4.8)
+pdf(file='./figure/ensemble_ELN_SVM_plot.pdf',width=8,height=4.8)
 Appendix_plot2 <- ggplot(Appendix_Result22,aes(x=stock,y=value,fill=diff,col=diff))+ geom_boxplot(outlier.shape=16,outlier.size=0, notch=T, width = 0.5)+coord_flip()+
   facet_grid(cols=vars(type),scale = "free_x", space="free_y", switch = "y" )+
   scale_fill_manual(values = color1)+
@@ -307,9 +337,9 @@ for(i in 1:length(char_name)){
                                        'Daily FPCA (d2)','Ask Price Derivative', 'Ask Volume Derivative', 'Bid Price Derivative', 
                                        'Bid Volume Derivative',
                                        'Mid-price Derivative', 'Mid-price','Best Ask Price', 'Best Ask Size', 'Weekly FPCA (d1)',
-                                       'Weekly FPCA (d2)', 'Ask Price Depth', 'Ask Price Return', 'Bid-ask Spread Crossing',
-                                       'Bid-ask Spread Return', 'Bid Price Depth', 'Bid Price Return Difference', 'Mean Ask Price',
-                                       'Mean Bid Price', 'Mean Mid-price', 'Standard Deviation', 'Window Slope')
+                                       'Weekly FPCA (d2)', 'Ask Price Depth', 'Best Ask Price Difference Return', 'Bid-ask Spread Crossing',
+                                       'Bid-ask Spread Return', 'Bid Price Depth', 'Best Bid Price Difference Return', 'Mean Ask Price',
+                                       'Mean Bid Price', 'Mean Mid-price', 'Within-Window Standard Deviation', 'Window Slope')
   
   
   pdf(file='./figure/barplot.pdf',width=10,height=7)
