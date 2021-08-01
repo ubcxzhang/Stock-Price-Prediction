@@ -339,6 +339,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 - produces appendix tables showing the summary statistics of the whole features of the full sample.
         
 </details>
+
 ~~~
     sbatch ./sh/appendix_table.sh
 ~~~ 
