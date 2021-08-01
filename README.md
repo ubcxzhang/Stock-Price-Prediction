@@ -50,15 +50,15 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── sample_ELN_full.R			# single experiments with ELN model    
     │ 	 ├── ensemble_svm.R			# ensemble 100 results with SVM model    
     │ 	 ├── ensemble_ELN.R			# ensemble 100 results with ELN model    
-    │ 	 ├── asssessment.R			# Wilcoxon Sign Rank Test and Visualizations    
-    │ 	 ├── appendix.R		        # Visualizations
+    │ 	 ├── figure.R			# Wilcoxon Sign Rank Test and Visualizations    
+    │ 	 ├── appendix_table.R		        # Visualizations
     │ 	 └── wiltest.R		        # Tool box with customized R functions					
 </details>
 <details><summary>rda</summary>
 
     ├── rda    
     │ 	 ├── date.rda		        # a file that records the trading dates
-    │ 	 └── dj30.rda		        # a dataset to reproduce graph in the paper 					
+    │ 	 └── dj30.csv		        # a dataset to reproduce Dow Jones 30 index graph in the paper 					
 </details>
 <details><summary>sh</summary>
 
@@ -67,8 +67,10 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── feature_encoding.sh					
     │ 	 ├── sample_svm.sh 			
     │ 	 ├── sample_ELN_full.sh 			
-    │ 	 ├── ensemble_svm.sh		
-    │ 	 └── ensemble_ELN.sh 				
+    │ 	 ├── ensemble_svm.sh
+    │ 	 ├── ensemble_ELN.sh
+    │ 	 ├── figure.sh
+    │ 	 └── appendix_table.sh				
 </details>
 <details><summary>rout</summary>
 
@@ -77,8 +79,10 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── feature_encoding.Rout		# log file for feature_encoding.sh
     │ 	 ├── sample_svm.i.Rout 			# log file for sample_svm.sh for each seed i (i=1,...,100)
     │ 	 ├── sample_ELN_full.i.Rout	    # log file for sample_ELN_full.sh for each seed i (i=1,...,100)     
-    │ 	 ├── ensemble_svm.Rout			# log file for ensemble_svm.sh        	
-    │ 	 └── ensemble_ELN.Rout 		    # log file for ensemble_ELN.sh
+    │ 	 ├── ensemble_svm.Rout			# log file for ensemble_svm.sh 
+    │ 	 ├── ensemble_ELN.Rout 		    # log file for ensemble_ELN.sh
+    │ 	 ├── figure.Rout                # log file for figure.sh
+    │ 	 └── appendix_table.Rout        # log file for appendix_table.sh, generated Latex tables will be stored here
 </details>
 <details><summary>results (final & intermedia results)</summary>
 
@@ -91,6 +95,16 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── [stock_name]_svm_ensemble_model.rda			# ensemble 100 results with SVM model for each component stock        	
     │ 	 └── [stock_name]_full_ensemble_model.rda 		    # ensemble 100 results with ELN model for each component stock
 </details>
+
+<details><summary>figure</summary>
+
+    ├── figure    
+    │ 	 ├── combined_plot.pdf
+    │ 	 ├── ensemble_ELN_SVM_plot.pdf
+    │ 	 ├── barplot.pdf
+    │ 	 └── dj30.pdf					
+</details>
+<details><summary>sh</summary>
 
 <details><summary>raw data</summary>
     
@@ -126,6 +140,8 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │        ├── EQY_US_ALL_NBBO_WMT.txt 
     │	     └── EQY_US_ALL_NBBO_DIS.txt 
 </details>
+
+
 
 
 
@@ -280,6 +296,11 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
     sbatch ./sh/figure.sh
 ~~~ 
 <details><summary> 5. generating figures in the paper (10 mins)</summary>
+- read in data `./rda/dow_jones30_daily.csv`;
+
+    - illstrates the daily price change of Dow Jones 30 index;
+
+- store figure 1 `./figure/dj30.pdf`.
 
 - using loop i equals 1 to 30 and read in data `./result/[char_name]_svm_ensemble_model.rda`;
 
@@ -287,7 +308,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows comparisons between baseline model v.s. ensemble model, baseline model v.s. no FPCA model, and baseline model v.s. no within-window model;
 
-- store figure 1 `./figure/combined_plot.pdf`.
+- store figure 2 `./figure/combined_plot.pdf`.
 
 - using loop j equals 1 to 30 and read in data `./result/[char_name]_j_model_full.rda`;
 
@@ -295,7 +316,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows comparisons between ensemble ELN model v.s. ELN model, ELN model v.s. SVM model, and ensemble ELN model v.s. SVM model;
 
-- store figure 2 `./figure/ensemble_ELN_SVM_plot.pdf`.
+- store figure 3 `./figure/ensemble_ELN_SVM_plot.pdf`.
     
 - using loop k equals 1 to 30 and read in data `./result/[char_name]_k_model_full.rda`;
 
@@ -303,7 +324,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows histogram of selected variables by ELN model in all three mid-price direction;
 
-- store figure 3 `./figure/barplot.pdf`.
+- store figure 4 `./figure/barplot.pdf`.
     
         
 </details>
