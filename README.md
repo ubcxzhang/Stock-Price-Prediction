@@ -104,7 +104,7 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── barplot.pdf
     │ 	 └── dj30.pdf					
 </details>
-<details><summary>sh</summary>
+
 
 <details><summary>raw data</summary>
     
