@@ -152,10 +152,10 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
 ## Running files (estimated time per job)
 
-- To run the files, submit .sh files with an order of 1. data cleaning.R to 4a. ensemble results with ELN model.R
+- To run the files, submit .sh files with an order of 1. data cleaning.R to 6. appendix_table.R
 - Always submit your job under [your_directory] instead of any of the subdirectory
-- The first and second jobs (e.g. "1. data cleaning", "2. feature construction") must be submitted in order; jobs "3. experiments with SVM model" and "3a. experiments with ELN model" can be submitted simultaneously; jobs "4. ensemble results with SVM model" and "4a. ensemble results with ELN model" can also be submitted at the same time
-- For example, ./sh/xx.sh runs ./code/xx.R, saves the results at ./result/xx and the log files at ./rout/xx
+- The first and second jobs (e.g. "1. data cleaning", "2. feature construction") must be submitted in order; jobs "3. experiments with SVM model" and "3a. experiments with ELN model" can be submitted simultaneously; jobs "4. ensemble results with SVM model" and "4a. ensemble results with ELN model" can also be submitted at the same time; "5. figure.R" and "6. appendix_table.R" can be submitted simultaneously.
+- For example, ./sh/xx.sh runs ./code/xx.R, saves the results at ./result/xx, produce graphs at ./figure/, generates table result in Latex format at ./rout/appendix_table.Rout and the log files at ./rout/xx
 
 
 <details><summary>1. data cleaning (12 hrs)</summary>
@@ -240,7 +240,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
 
 <details><summary> 4. ensemble results with SVM model (6 hrs, submit 30 jobs)</summary>
-    **# SVM model ensemble is too slow, divide it into 30 separate jobs representing 30 targeted stocks**
+    **SVM model ensemble is too slow, divide it into 30 separate jobs representing 30 targeted stocks**
 
 - using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_svm.rda`;
 
@@ -274,7 +274,53 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
     sbatch ./sh/ensemble_ELN.sh
 ~~~ 
 
-customized R functions are defined in `wiltest.R` file, `assessment.R` and `appendix.R` produce visualizations and test results, which can be run on local server
+customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix_table.R` produce visualizations and test results, which can be run on local server
+
+~~~
+    sbatch ./sh/figure.sh
+~~~ 
+<details><summary> 5. generating figures in the paper (10 mins)</summary>
+
+- using loop i equals 1 to 30 and read in data `./result/[char_name]_svm_ensemble_model.rda`;
+
+    - produces boxplots using ggplot;
+
+    - shows comparisons between baseline model v.s. ensemble model, baseline model v.s. no FPCA model, and baseline model v.s. no within-window model;
+
+- store figure 1 `./figure/combined_plot.pdf`.
+
+- using loop j equals 1 to 30 and read in data `./result/[char_name]_j_model_full.rda`;
+
+    - produces boxplots using ggplot;
+
+    - shows comparisons between ensemble ELN model v.s. ELN model, ELN model v.s. SVM model, and ensemble ELN model v.s. SVM model;
+
+- store figure 2 `./figure/ensemble_ELN_SVM_plot.pdf`.
+    
+- using loop k equals 1 to 30 and read in data `./result/[char_name]_k_model_full.rda`;
+
+    - produces barplots using ggplot;
+
+    - shows histogram of selected variables by ELN model in all three mid-price direction;
+
+- store figure 3 `./figure/barplot.pdf`.
+    
+        
+</details>
+
+~~~
+    sbatch ./sh/appendix_table.sh
+~~~ 
+<details><summary> 6. produces tables in the paper (6 hrs)</summary>
+**All the table results output are in latex format, they are printed in the log file at './rout/appendix_table.Rout'**
+
+- produces table1 showing the median values of Recall, Precision and F1 score of the baseline model over all 100 experiments;
+
+- produces table2 showing the median values of Recall, Precision and F1 score of the ensemble with SVM, nofpca, and no within-win models over all 100 experiments respectively;
+
+- produces appendix tables showing the summary statistics of the whole features of the full sample.
+        
+</details>
 
 
 
