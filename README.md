@@ -292,7 +292,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
     sbatch ./sh/ensemble_ELN.sh
 ~~~ 
 
-customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix_table.R` produce visualizations and test results, which can be run on local server
+customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix_table.R` produce visualizations and table results, which can be run on local server
 
 <details><summary> 5. generating figures in the paper (10 mins)</summary>
 - read in data `./rda/dow_jones30_daily.csv`;
