@@ -2,7 +2,7 @@
 #SBATCH -J BV1
 #SBATCH --account=def-ubcxzh
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=30G
+#SBATCH --mem=40G
 #SBATCH -t 0-05:59:00
 
 module load nixpkgs/16.09 
