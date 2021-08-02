@@ -338,7 +338,9 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
 - produces table2 showing the median values of Recall, Precision and F1 score of the ensemble with SVM, nofpca, and no within-win models over all 100 experiments respectively;
 
-- produces appendix tables showing the summary statistics of the whole features of the full sample.
+- produces appendix tables showing the summary statistics of the whole features of the full sample;
+
+- save file `./result/intermedia_table.rda`
         
 </details>
 
