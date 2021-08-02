@@ -37,8 +37,8 @@ jj <- as.numeric(args[1]) #input number from outside
   
   Accuracy_sum <- Accuracy_sum_nofpca <-  Accuracy_sum_nowin  <- list()
     model_sum <- model_sum_nofpca <- model_sum_nowin <-test_sum <-Accuracy_sum_ensem <-list()
-  test <- try(load(paste0('./result/', char,'_1_model_svm.rda')),silent=T)
-  if(class(test)%in%'try-error') next
+#   test <- try(load(paste0('./result/', char,'_1_model_svm.rda')),silent=T)
+#   if(class(test)%in%'try-error') next
   test <- vector()
   flag <- vector()
   for(i in 1:100){

@@ -336,8 +336,8 @@ for(i in 1:length(char_name)){
   levels(Result_barplot$selected) <- c('Arrival Rate', 'Best Bid Price', 'Best Bid Size', 'Daily FPCA (d1)',
                                        'Daily FPCA (d2)','Ask Price Derivative', 'Ask Volume Derivative', 'Bid Price Derivative', 
                                        'Bid Volume Derivative',
-                                       'Mid-price Derivative', 'Mid-price','Best Ask Price', 'Best Ask Size', 'Weekly FPCA (d1)',
-                                       'Weekly FPCA (d2)', 'Ask Price Depth', 'Best Ask Price Difference Return', 'Bid-ask Spread Crossing',
+                                       'Mid-price Derivative', 'Mid-price', 'Best Ask Size', 'Weekly FPCA (d1)',
+                                       'Weekly FPCA (d2)', 'Ask Price Depth', 'Best Ask Price Difference Return', 'Bid-ask Spread Crossing Return',
                                        'Bid-ask Spread Return', 'Bid Price Depth', 'Best Bid Price Difference Return', 'Mean Ask Price',
                                        'Mean Bid Price', 'Mean Mid-price', 'Within-Window Standard Deviation', 'Window Slope')
   

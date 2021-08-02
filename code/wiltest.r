@@ -168,29 +168,29 @@ parameter <- function(modelsm,testsm,num,char){
   
   result <- list()
   # count the parameters
-  print(paste0("The parameters/coefficients of ",char," > ",num, " are:"))
-  print('--------------Stationary---------------')
-  print(colnames(testsm[[1]])[which(as.numeric(table(Sfull_model_significance$i))>num)])
-  print(as.numeric(table(Sfull_model_significance$i))[which(as.numeric(table(Sfull_model_significance$i))>num)])
-  print(paragenerator_agg[paragenerator_agg$trend=='S',][which(as.numeric(table(Sfull_model_significance$i))>num),3])
+#   print(paste0("The parameters/coefficients of ",char," > ",num, " are:"))
+#   print('--------------Stationary---------------')
+#   print(colnames(testsm[[1]])[which(as.numeric(table(Sfull_model_significance$i))>num)])
+#   print(as.numeric(table(Sfull_model_significance$i))[which(as.numeric(table(Sfull_model_significance$i))>num)])
+#   print(paragenerator_agg[paragenerator_agg$trend=='S',][which(as.numeric(table(Sfull_model_significance$i))>num),3])
   result[['S']] <- list(var=colnames(testsm[[1]])[which(as.numeric(table(Sfull_model_significance$i))>num)],
                         freq=as.numeric(table(Sfull_model_significance$i))[which(as.numeric(table(Sfull_model_significance$i))>num)],
                         coef=paragenerator_agg[paragenerator_agg$trend=='S',][which(as.numeric(table(Sfull_model_significance$i))>num),3])
   
   
-  print('---------------Downwards----------------')
-  print(colnames(testsm[[1]])[which(as.numeric(table(Dfull_model_significance$i))>num)])
-  print(as.numeric(table(Dfull_model_significance$i))[which(as.numeric(table(Dfull_model_significance$i))>num)])
-  print(paragenerator_agg[paragenerator_agg$trend=='D',][which(as.numeric(table(Dfull_model_significance$i))>num),3])
+#   print('---------------Downwards----------------')
+#   print(colnames(testsm[[1]])[which(as.numeric(table(Dfull_model_significance$i))>num)])
+#   print(as.numeric(table(Dfull_model_significance$i))[which(as.numeric(table(Dfull_model_significance$i))>num)])
+#   print(paragenerator_agg[paragenerator_agg$trend=='D',][which(as.numeric(table(Dfull_model_significance$i))>num),3])
   
   result[['D']] <- list(var=colnames(testsm[[1]])[which(as.numeric(table(Dfull_model_significance$i))>num)],
                         freq=as.numeric(table(Dfull_model_significance$i))[which(as.numeric(table(Dfull_model_significance$i))>num)],
                         coef=paragenerator_agg[paragenerator_agg$trend=='D',][which(as.numeric(table(Dfull_model_significance$i))>num),3])
   
-  print('----------------Upwards-----------------')
-  print(colnames(testsm[[1]])[which(as.numeric(table(Ufull_model_significance$i))>num)])
-  print(as.numeric(table(Ufull_model_significance$i))[which(as.numeric(table(Ufull_model_significance$i))>num)])
-  print(paragenerator_agg[paragenerator_agg$trend=='U',][which(as.numeric(table(Ufull_model_significance$i))>num),3])
+#   print('----------------Upwards-----------------')
+#   print(colnames(testsm[[1]])[which(as.numeric(table(Ufull_model_significance$i))>num)])
+#   print(as.numeric(table(Ufull_model_significance$i))[which(as.numeric(table(Ufull_model_significance$i))>num)])
+#   print(paragenerator_agg[paragenerator_agg$trend=='U',][which(as.numeric(table(Ufull_model_significance$i))>num),3])
   result[['U']] <- list(var=colnames(testsm[[1]])[which(as.numeric(table(Ufull_model_significance$i))>num)],
                         freq=as.numeric(table(Ufull_model_significance$i))[which(as.numeric(table(Ufull_model_significance$i))>num)],
                         coef=paragenerator_agg[paragenerator_agg$trend=='U',][which(as.numeric(table(Ufull_model_significance$i))>num),3])
@@ -205,10 +205,10 @@ parameter <- function(modelsm,testsm,num,char){
 getAccuracy <- function(char,x,i,cha,index,cutoff1){
   var_args <- list(char,x,i,cha,index,cutoff1)
   F_test_temp <- x
-  for(tt in 1:ncol(F_test_temp)){
-    if(sum(is.infinite(F_test_temp[,tt]))>0) F_test_temp[which(is.infinite(F_test_temp[,tt])),tt] <- 0
-    if(sum(is.na(F_test_temp[,tt]))>0) F_test_temp[which(is.na(F_test_temp[,tt])),tt] <- 0
-    if(sum(is.nan(F_test_temp[,tt]))>0) F_test_temp[which(is.nan(F_test_temp[,tt])),tt] <- 0
+  for(tt in 1:(ncol(F_test_temp)-1)){
+    if(sum(is.infinite(F_test_temp[,tt]))>0) F_test_temp[which(is.infinite(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
+    if(sum(is.na(F_test_temp[,tt]))>0) F_test_temp[which(is.na(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
+    if(sum(is.nan(F_test_temp[,tt]))>0) F_test_temp[which(is.nan(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
   }
   
   test_sample <- F_test_temp[index==1,]

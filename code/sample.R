@@ -141,12 +141,13 @@ for(jj in 1:length(char_name) ){
     }
   }
   
-  for(tt in 1:ncol(F_test_temp)){
-    if(sum(is.infinite(F_test_temp[,tt]))>0) F_test_temp[which(is.infinite(F_test_temp[,tt])),tt] <- 0
-    if(sum(is.na(F_test_temp[,tt]))>0) F_test_temp[which(is.na(F_test_temp[,tt])),tt] <- 0
-    if(sum(is.nan(F_test_temp[,tt]))>0) F_test_temp[which(is.nan(F_test_temp[,tt])),tt] <- 0
-    if(sum(is.null(F_test_temp[,tt]))>0) F_test_temp[which(is.null(F_test_temp[,tt])),tt] <- 0
+  for(tt in 1:(ncol(F_test_temp)-1)){
+    if(sum(is.infinite(F_test_temp[,tt]))>0) F_test_temp[which(is.infinite(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
+    if(sum(is.na(F_test_temp[,tt]))>0) F_test_temp[which(is.na(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
+    if(sum(is.nan(F_test_temp[,tt]))>0) F_test_temp[which(is.nan(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
+    if(sum(is.null(F_test_temp[,tt]))>0) F_test_temp[which(is.null(F_test_temp[,tt])),tt] <- median(F_test_temp[,tt], na.rm=T)
   }
+#     if(sum(is.na(F_test_temp[,ncol(F_test_temp)]))>0) F_test_temp <- F_test_temp[-which(is.na(F_test_temp[,ncol(F_test_temp)])),]
   
   test_sample <- F_test_temp[index==1,]
   train_sample <- F_test_temp[index!=1,]

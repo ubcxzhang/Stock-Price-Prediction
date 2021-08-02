@@ -104,10 +104,26 @@ for(ii in 1:length(char_name)){
   longterm <- longterm[order(longterm$date),]
   
   # use longterm minus its group average
-  # longterm$midprice <- longterm$midprice-rep(aggregate(midprice~date+hour,data=longterm,mean)[,2],as.numeric(table(longterm$date)))
-  longterm$month <-substr(longterm$date,5,6) 
+    longterm1 <- split(longterm$midprice,longterm$date)
+    longterm1_mean <- aggregate(midprice~hour,data=longterm,mean)[,2]
+ # longterm1$midprice <- longterm1$midprice-rep(aggregate(midprice~hour,data=longterm1,mean)[,2], 64)
+    for(t in 1:length(longterm1)){
+    if(length(longterm1[[t]])!=8){
+      num <- as.numeric(longterm$hour[which(longterm$date==names(longterm1)[t])])
+      temp <- rep(NA,8)
+      temp[c(9:16)%in%num] <- longterm1[[t]]-longterm1_mean[c(9:16)%in%num]
+      longterm1[[t]] <- temp
+    }
+        else longterm1[[t]] <- longterm1[[t]]-longterm1_mean
+    
+  }  
   
-  Flies <- MakeFPCAInputs(longterm$date, longterm$hour, longterm$midprice)
+  longterm1 <- unlist(longterm1)
+  longterm1 <- longterm1[!is.na(longterm1)]
+  longterm1 <- data.frame(midprice=unlist(longterm1), date=longterm$date, hour=longterm$hour)  
+  longterm1$month <- substr(longterm$date,5,6) 
+  
+  Flies <- MakeFPCAInputs(longterm1$date, longterm1$hour, longterm1$midprice)
   fpcaObjFlies <- FPCA(Flies$Ly, Flies$Lt)
   
   # to ensure FPCA can explain over 99%
@@ -209,8 +225,11 @@ for(ii in 1:length(char_name)){
   longterm3d$hr <- rep(rep(9:16,each=8),63)
   longterm3d$id <- rep(1:(63*8),each=8)
   
+  longterm3d_dt <- longterm3d
+  longterm3d_dt$midprice <- longterm3d$midprice- rep(aggregate(midprice~hr,data=longterm3d,mean)[,2],nrow(longterm3d_dt)/8)
+  
 
-  Flies3 <- MakeFPCAInputs(longterm3d$id, longterm3d$obs, longterm3d$midprice,na.rm=T)
+  Flies3 <- MakeFPCAInputs(longterm3d_dt$id, longterm3d_dt$obs, longterm3d_dt$midprice,na.rm=T)
   fpcaObjFlies3 <- FPCA(Flies3$Ly, Flies3$Lt, list(plot = F, methodMuCovEst = 'smooth', userBwCov = 2))
   
   # to ensure FPCA can explain over 99%

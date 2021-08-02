@@ -38,8 +38,8 @@ for(jj in 1:length(char_name)){
   print(char)
   print(Sys.time())
 Accuracy_sum2 <- model_sum1<-test_sum1 <-Accuracy_sum_ensem_ELN <-list()
-test <- try(load(paste0('./result/', char,'_1_model_full.rda')),silent=T)
-if(class(test)%in%'try-error') next
+# test <- try(load(paste0('./result/', char,'_1_model_full.rda')),silent=T)
+# if(class(test)%in%'try-error') next
 test <- vector()
 flag <- vector()
 for(i in 1:100){
