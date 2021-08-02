@@ -94,7 +94,7 @@ colnames(table.feature) <- c( 'Best Bid Price (USD)', 'Best Ask Price (USD)', 'B
 rownames(table.feature) <- c('Mean','Median','Std Dev','Min','Max')
 dimnames(table.feature)[[3]] <- char_name
                                   
-# save(table.feature, file='./result/intermedia_table.rda')
+save(table.feature, file='./result/intermedia_table.rda')
        
 for(i in 1:length(char_name)){
 char <- char_name[i]
