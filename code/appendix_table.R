@@ -5,6 +5,12 @@ rm(list=ls())
 # setwd(path0)
 source('./code/wiltest.r')
 # setwd(file.path(path0,'result'))
+library(dbplyr)
+library(data.table)
+library(glmnet)
+library(fdapace)
+library(bit64)
+library(reshape2)
 library(Matrix)
 library(tidyr)
 library(stringr)
@@ -100,3 +106,65 @@ xtable(table.result,digits=3)
 # char <- char_name[i]
 # print(xtable(t(table.feature[,,i]),caption=paste0('Summary features of stock ', char)),caption.placement = "top")
 # }
+
+
+# the variable of daily volume
+TRADE_volume <- list()
+
+for(kk in 1:length(char_name)){
+
+
+#   if(kk>1) rm(list=ls()[-which(ls()%in%c('char_name','kk'))])
+  char <- char_name[kk]
+  print(char)
+  print(Sys.time())
+    daily_volume <- try(fread(file=paste0('/project/6003851/SharedData/NYSE16/GroupingResult/TRADE/EQY_US_ALL_TRADE_',char,'.txt'),sep='|',header=F),silent=T)
+    daily_volume <- as.data.table(daily_volume)
+#     V5 is the trade volume of each transaction, V10 is the date
+    daily_volume$V10 <- as.character(daily_volume$V10)
+    daily_volume$V10 <- as.factor(daily_volume$V10)
+    
+    TRADE_volume[[kk]] <- daily_volume[,sum(V5),by=V10]$V1
+}    
+
+# the variable of bid-ask spread (basis points), mid-price and market depth(share)
+Bidask_spread <- list()
+Mid_price <- list()
+Mkt_depth <- list()
+    
+    
+    for(k in 1:length(char_name)){
+    char <- char_name[k]
+    print(k)
+  test <- try(load(paste0('./result/', char,'_final.rda')),silent = T)
+  if(class(test)%in%"try-error") next
+  
+  Bidask_spread[[k]] <- (stock$Best_Offer_Price-stock$Best_Bid_Price)/stock$midprice
+  Mkt_depth[[k]] <- (stock$Best_Bid_Size+stock$Best_Offer_Size)*100
+  Mid_price[[k]] <- stock$midprice
+        
+        }
+
+Mkt_cap <- read.csv('./rda/mkt_cap.csv')
+Mkt_cap$mkt_cap[which(Mkt_cap$unit=='T')] <- Mkt_cap$mkt_cap[which(Mkt_cap$unit=='T')]*1000
+
+table.feature <- matrix(NA,ncol=5,nrow=5)
+rownames(table.feature) <- c('Mean','Median','Std Dev','Min','Max')
+colnames(table.feature) <- c('MktCap ($billion)','Volume (million)','Spread (bps)', 'Midprice ($ per share)', 'Depth (shares)')
+
+feature <- list(Mkt_cap$mkt_cap, unlist(TRADE_volume),unlist(Bidask_spread),unlist(Mid_price),
+               unlist(Mkt_depth))
+feature[[3]] <- feature[[3]][-which(feature[[3]]<0)]
+
+table.feature[1,] <- sapply(feature,function(x) mean(x,na.rm=T))
+table.feature[2,] <- sapply(feature,function(x) median(x,na.rm=T))
+table.feature[3,] <- sapply(feature,function(x) sd(x,na.rm=T))
+table.feature[4,] <- sapply(feature,function(x) min(x,na.rm=T))
+table.feature[5,] <- sapply(feature,function(x) max(x,na.rm=T))
+
+# adjusting the unit
+table.feature[,2] <- table.feature[,2]/10^6
+table.feature[,3] <- table.feature[,3]*10^4
+
+xtable(table.feature,digits=3)
+
