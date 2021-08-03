@@ -3,7 +3,7 @@
 #SBATCH --account=def-ubcxzh
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=50G
-#SBATCH -t 0-12:00:00
+#SBATCH -t 0-10:00:00
 
 module load nixpkgs/16.09 
 module load gcc/7.3.0 
