@@ -331,7 +331,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 ~~~
     sbatch ./sh/figure.sh
 ~~~ 
-<details><summary> 6. produces tables in the paper (4 hrs)</summary>
+<details><summary> 6. produces tables in the paper (30 mins)</summary>
 **All the table results output are in latex format, they are printed in the log file at './rout/appendix_table.Rout'**
 
 - produces table1 showing the median values of Recall, Precision and F1 score of the baseline model over all 100 experiments;
