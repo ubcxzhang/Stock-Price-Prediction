@@ -30,11 +30,11 @@ all the log files are in the subdirectory directory at **rout**
 ~~~
 all the final prediction results/intermedia results are in the subdirectory directory at **result** 
 ~~~
-    /project/6003851/y2huang/midprice_predict/final_version_2/result  
+    /project/6003851/[your_deirctory]/result  
 ~~~
 all the graphs in the paper are in the subdirectory directory at **figure** 
 ~~~
-    /project/6003851/y2huang/midprice_predict/final_version_2/figure  
+    /project/6003851/[your_deirctory]/figure  
 ~~~
 all the **raw datasets** from New York Stock Exchange are stored at, which are accessible to all group members
 ~~~
