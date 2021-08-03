@@ -36,7 +36,7 @@ all the graphs in the paper are in the subdirectory directory at **figure**
 ~~~
     [your_deirctory]/figure  
 ~~~
-all the **raw datasets** from New York Stock Exchange are stored at, which are accessible to all group members
+all the **raw datasets** from New York Stock Exchange are stored at the directory bellow, which are accessible to all group members
 ~~~
     /projects/def-ubcxzh/SharedData/NYSE16/GroupingResult/NBBO  
 ~~~
@@ -52,12 +52,13 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │ 	 ├── ensemble_ELN.R			# ensemble 100 results with ELN model    
     │ 	 ├── figure.R			# Wilcoxon Sign Rank Test and Visualizations    
     │ 	 ├── appendix_table.R		        # Visualizations
-    │ 	 └── wiltest.R		        # Tool box with customized R functions					
+    │ 	 └── wiltest.r  	        # Tool box with customized R functions					
 </details>
 <details><summary>rda</summary>
 
     ├── rda    
     │ 	 ├── date.rda		        # a file that records the trading dates
+    │ 	 ├── mkt_cap.csv		    # a file that records the maket capitalization for all 30 stocks
     │ 	 └── dj30.csv		        # a dataset to reproduce Dow Jones 30 index graph in the paper 					
 </details>
 <details><summary>sh</summary>
