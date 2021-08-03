@@ -10,31 +10,31 @@ Though machine learning-based methods are widely applied in stock mid-price pred
 
 We assume the user set the default directory at **Graham** at Compute Canada
 ~~~
-    /project/6003851/[your_deirctory]  
+    [your_deirctory]  
 ~~~
 all the R codes are in the subdirectory directory at **code** 
 ~~~
-    /project/6003851/[your_deirctory]/code  
+    [your_deirctory]/code  
 ~~~
 all additional data to produce graphs except for the NYSE stock dataset are in the subdirectory directory at **rda** 
 ~~~
-    /project/6003851/[your_deirctory]/rda  
+    [your_deirctory]/rda  
 ~~~
 all the .sh files that run the R files are in the subdirectory directory at **sh** 
 ~~~
-    /project/6003851/[your_deirctory]/sh  
+    [your_deirctory]/sh  
 ~~~
 all the log files are in the subdirectory directory at **rout** 
 ~~~
-    /project/6003851/[your_deirctory]/rout  
+    [your_deirctory]/rout  
 ~~~
 all the final prediction results/intermedia results are in the subdirectory directory at **result** 
 ~~~
-    /project/6003851/[your_deirctory]/result  
+    [your_deirctory]/result  
 ~~~
 all the graphs in the paper are in the subdirectory directory at **figure** 
 ~~~
-    /project/6003851/[your_deirctory]/figure  
+    [your_deirctory]/figure  
 ~~~
 all the **raw datasets** from New York Stock Exchange are stored at, which are accessible to all group members
 ~~~
@@ -141,9 +141,17 @@ all the **raw datasets** from New York Stock Exchange are stored at, which are a
     │	     └── EQY_US_ALL_NBBO_DIS.txt 
 </details>
 
+---
+## Notice
 
+As all the processes are conducted using the relative path, it's very important to set up [your_directory] and use it correctly. 
+[your_directory] should be consisted of three parts: part 1 is ```/project/6003851/``` to ensure all the files can run on Compute Canada; part 2 is your ```user name``` at Compute Canada; part 3 is your ```folder's name```. For example, the writer's directory is as follows:
 
+~~~
+/project/6003851/y2huang/midprice_predict/thesis_check
+~~~
 
+If you are not sure about the path of your working folder, try to type in 'pwd' command in linux or 'getwd()' in R language for reference. 
 
 ---
 ## Before you start
