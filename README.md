@@ -58,8 +58,8 @@ all the **raw datasets** from New York Stock Exchange are stored at the director
 
     ├── rda    
     │ 	 ├── date.rda		        # a file that records the trading dates
-    │ 	 ├── mkt_cap.csv		    # a file that records the maket capitalization for all 30 stocks
-    │ 	 └── dj30.csv		        # a dataset to reproduce Dow Jones 30 index graph in the paper 					
+    │ 	 ├── mkt_cap.csv		    # a file that records the maket capitalization for all 30 stocks (From Yahoo Finance)
+    │ 	 └── dj30.csv		        # a dataset to reproduce Dow Jones 30 index graph in the paper (From Yahoo Finance)				
 </details>
 <details><summary>sh</summary>
 
