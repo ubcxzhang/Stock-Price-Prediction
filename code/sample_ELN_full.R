@@ -4,9 +4,6 @@ rm(list=ls())
 args <- commandArgs(trailingOnly = TRUE)
 
 
-# server <- TRUE 
-# path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
-# setwd(path0)
 source('./code/wiltest.r')
 # load('cutoff.rda')
 options(digits = 6)
@@ -23,14 +20,13 @@ library(MTPS)
 char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM',
                'WBA','GS','HD','INTC','IBM','JNJ','JPM','MCD','MRK','NKE','PFE','PG',
                'TRV','UNH','UTX','VZ','V','WMT','DIS')
+
+
+# define the length of event-based window \Delta t=5 events
 k <- 5
 
-
-
-
 for(jj in 1:length(char_name)){
- # setwd(file.path(path0,'result'))
- # setwd('./result/')
+ 
  char <- char_name[jj] 
  # cutoff1 <- as.numeric(cutoff[jj,1])
  print(char)
@@ -38,12 +34,9 @@ test <- try(load(paste0('./result/',char,'_to_sample.rda')))
 if(class(test)%in%"try-error") next
 
 
-# ATTENTION!
-# because this is a local test, the sample size will differ from the real one
-# sample and save the result
-
 # we can't have NA in the data frame or we can't use CV because it will identify them as character
 
+# our sample size  
 nsize <- 10000
 nfold <- 5 # this is to guarantee the distn of testing and training is the same
 # in our setting the size of testing set is one fifth of the training set
@@ -63,18 +56,7 @@ for(j in 1:ncol(F_test)){
   if(sum(is.na(F_test[,j]))!=0){F_test[which(is.na(F_test[,j])),j] <- 0}
 }
 
-# plot the corralation matrix before standarization
-# library(corrplot)
-# F_test_plot <- F_test[,which(colnames(F_test)%in%c(paste0("sec_midprice_t_",1:5),paste0("min_midprice_t_",1:5),paste0("hour_midprice_t_",1:3), paste0("daily_curve_fpca",1:16),
-#                                                    "windowslope",paste0("bid_ask_spread_t_",1:5),"klevel_diff_best_bid_return","klevel_diff_best_ask_return","mean_best_bid_size","mean_best_ask_size",
-#                                                    "b_bid_b_ask_sc_return"))]
-
-# corrplot(cor(F_test_plot),tl.cex=0.7,method='color',order='FPC')
-
-# because the ratio of the categories with affect the general accuracy
-# so we follow the ieee's method and give a proper rearrangement 
-# ATTENTION!, here I use t=3, the future 3 terms, which can be changed, but the followed should also be changed
-
+# define alpha=10^(-5) as the significance level to label our response variable
 a <- 10^(-5)
 stock$compare <- rowMeans(data.table(matrix(cbind(unlist(data.table::shift(stock$midprice,-(1:k),type='lag'))),nrow=length(stock$midprice),ncol=k)))
 stock$compare <-  stock$compare/stock$midprice
@@ -134,18 +116,17 @@ F_test <- F_test[which(1:nrow(F_test)%%k==0),]
     }
   }
   
-  # setwd(file.path(path0,'result_ELN_nocut'))
-  # setwd(file.path(path0,'result'))
-  # setwd('./result/')
+
   ###################################################
-  ##########full model with all variables###########
+  # baseline ELN model with Strategy I and Strategy III
+  ###################################################
   time <- Sys.time()
   # try no cutoff, input 'NULL', if you wanna use cutoff value, put down cutoff1 
   # instead of 'NULL'
   test <- try(getAccuracy(char,F_test_temp,i,'full',index,NULL),silent = T)
   if(class(test)[1]%in%'try-error') next
   print(Sys.time()-time)
-  # getAccuracy(char,F_test_temp,i,'full',index,cutoff1)
+
   
 
 }
