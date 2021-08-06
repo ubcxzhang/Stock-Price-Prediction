@@ -1,26 +1,11 @@
-# This is for ensemble
-# version3
-# module load nixpkgs/16.09 gcc/7.3.0 r/3.6.1
+# This is for ensemble baseline model with ELN
+
 rm(list=ls())
-#setwd("/project/6003851/y2huang/midprice_predict")
-# setwd("/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
-# server <- TRUE 
-# path0 <- ifelse(server, "/project/6003851/y2huang/midprice_predict/final_version_2", "/Users/ying/Desktop/UVic/Year1_summer2020/mid_price_prediction/code/local_test")
-# setwd(path0)
-# load('cutoff.rda')
-# for the trail of no cutoff
-# setwd(file.path(path0,'result_ELN_nocut'))
-# otherwise
-# setwd(file.path(path0,'result'))
-#setwd(file.path(path0,'AAPL'))
+
 options(digits = 4)
 library(dbplyr)
 library(data.table)
 library(glmnet)
-#library(e1071)
-#library(randomForest)
-#library(fdapace)
-#library(bit64)
 library(caret)
 
 # Don Jones 30 component stocks
@@ -30,7 +15,6 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
 
  
  
- 
 for(jj in 1:length(char_name)){
   time <- Sys.time()
   char <- char_name[jj] 
@@ -38,8 +22,7 @@ for(jj in 1:length(char_name)){
   print(char)
   print(Sys.time())
 Accuracy_sum2 <- model_sum1<-test_sum1 <-Accuracy_sum_ensem_ELN <-list()
-# test <- try(load(paste0('./result/', char,'_1_model_full.rda')),silent=T)
-# if(class(test)%in%'try-error') next
+
 test <- vector()
 flag <- vector()
 for(i in 1:100){
@@ -55,15 +38,15 @@ for(i in 1:100){
 Accuracy_sum_ELN <- Accuracy_sum2[flag]
 model_sum <- model_sum1[flag]
 test_sum <- test_sum1[flag]
-# a problem occurs, data is unbalanced. It's very possible that no prediction of 'S'
-# k is for data and j is for model
+
+  
 # Attention! the value of nrow will change if the spliting change in sample
-# ATTENTION! the number of test sample is 2001 but train sample is 7999 maybe the former R file has a minor mistake
 fit.pre.sum <- fit.pre.sum.prob <- matrix(0,ncol=length(flag),nrow=2000)
 
-# ATTENTION! don't know why sample size be 2000 or 2001 and 1999
+  ################################################
+  # Ensemble 100 ELN baseline models
+  ################################################
 # k represents the dataset and j represents the model
-# for each dataset we have all j models and use the voting scheme
 for(k in 1:length(flag)){
    # print(k)
   if(nrow(test_sum[[k]])<2000){
@@ -92,6 +75,8 @@ for(k in 1:length(flag)){
     
   }
   
+
+  # for each dataset we use the voting scheme
   list.fit.pre <-apply(as.matrix(fit.pre.sum),1,list)
   list.fit.pre <-lapply(list.fit.pre,table)
   num.fit.pre <- unlist(lapply(list.fit.pre,length))
