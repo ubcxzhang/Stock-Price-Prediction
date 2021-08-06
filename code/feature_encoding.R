@@ -29,7 +29,9 @@ for(kk in 1:length(char_name)){
   stock$Best_Bid_Size <- stock$Best_Bid_Size*100
   stock$Best_Offer_Size <- stock$Best_Offer_Size*100
   
+  #################################################################
   # Features Encoding
+  #################################################################
   
   # features collections(short term, derived directly from raw (aggregated) data)
   # basic set
