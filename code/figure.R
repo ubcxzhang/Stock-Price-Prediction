@@ -1,4 +1,4 @@
-# This is for comparison mainly focus on the SVM, including SVM, ensemble SVM, SVM_nowin and SVM_nofpca
+# This is for generating graphs that show the comparisons between different experimental designs
 #getwd()
 rm(list=ls())
 
@@ -9,21 +9,10 @@ library(ggplot2)
 
 options(digits = 6)
 
-# what model to compare
-# full model——includes all the high frequency and low frequency vars
-# full-ensemble model——incudes full model and its counterpart full and ensemble model
-# nofpca model——includes all vars of full model except the lack of all 16 fpca vars
-# nowin1 / nowin2 model ——reduce high-frequency relevant variables, Idk if we require this temporarily
-# svm / nowin model—— a selected model and its FPCA counterpart, svm has all high-fre vars while nowin has the FPCA as well
-# ts model—— a model using a time series model 
 
 warnings('off')
-# what to compare
-# full model non ensemble v.s. full model ensemble
-# full model v.s. nofpca model
-# full model v.s. ts model
-# svm v.s. nowin
-# svm v.s. full model
+
+
 # Don Jones 30 component stocks
 char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM',
                'WBA','GS','HD','INTC','IBM','JNJ','JPM','MCD','MRK','NKE','PFE','PG',
@@ -61,7 +50,17 @@ dev.off()
 
 
 
-###################SVM picture 1#######################
+###################result: picture 1#######################
+
+# baseline model——includes all the high frequency and 'within-window' vars (Strategy I and Strategy III)
+# full-ensemble model——ensemble baseline models
+# nofpca model——exclude FPCA vars from baseline model
+# nowin model ——exclude 'within-window' vars from baseline model
+
+# what to compare
+# baseline SVM model v.s. full ensemble model
+# baseline SVM model v.s. nofpca model
+# baseline SVM model v.s. ts model
 
 # setwd(file.path(path0,'result'))
 result <- matrix(NA,ncol=30,nrow=100)
@@ -154,9 +153,18 @@ generalplot
 dev.off()
 
 
+####################result: picture 2#######################
+######################data preparation######################
 
-####################################################################################################
-####################################################################################################
+
+# baseline full model——ELN model includes all the high frequency and 'within-window' vars (Strategy I and Strategy III)
+# ELN ensemble model——ELN ensemble baseline models
+
+# what to compare
+# baseline SVM model v.s. baseline ELN model
+# baseline ELN model v.s. ensemble ELN model
+# baseline SVM model v.s. ensemble ELN model
+
 Accuracy_sum <- model_sum <- test_sum <- list()
 missing <- list()
 for(ii in 1:length(char_name)){
@@ -198,8 +206,9 @@ for (ii in 1:length(char_name)){
 }
 
 
-# ###################picture 2#######################
+# ###################result: picture 2#######################
 # significance test to color the boxplots
+
 test1.ELN <- list()
 for(i in 1:length(char_name)){
   char <- char_name[i]
