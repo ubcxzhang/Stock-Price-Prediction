@@ -278,7 +278,7 @@ Appendix_plot2+geom_hline(aes(yintercept=0), colour="#990000", linetype="dashed"
 dev.off()
 
 
-# ###################picture 3#######################
+# ###################result: picture 3#######################
 # boxplot of features chosen
 Accuracy_sum <- model_sum <- test_sum <- list()
 chosen <- list()
