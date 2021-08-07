@@ -100,10 +100,10 @@ all the **raw datasets** from New York Stock Exchange are stored at the director
 <details><summary>figure</summary>
 
     ├── figure    
-    │ 	 ├── combined_plot.pdf
-    │ 	 ├── ensemble_ELN_SVM_plot.pdf
-    │ 	 ├── barplot.pdf
-    │ 	 └── dj30.pdf					
+    │ 	 ├── combined_plot.pdf (Figure5.pdf)
+    │ 	 ├── ensemble_ELN_SVM_plot.pdf (Figure6.pdf)
+    │ 	 ├── barplot.pdf (Figure7.pdf)
+    │ 	 └── dj30.pdf (Figure4.pdf)					
 </details>
 
 
@@ -309,7 +309,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - illstrates the daily price change of Dow Jones 30 index;
 
-- store figure 1 `./figure/dj30.pdf`.
+- store figure 1 `./figure/dj30.pdf (Figure4.pdf)`.
 
 - using loop i equals 1 to 30 and read in data `./result/[char_name]_svm_ensemble_model.rda`;
 
@@ -317,7 +317,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows comparisons between baseline model v.s. ensemble model, baseline model v.s. no FPCA model, and baseline model v.s. no within-window model;
 
-- store figure 2 `./figure/combined_plot.pdf`.
+- store figure 2 `./figure/combined_plot.pdf (Figure5.pdf)`.
 
 - using loop j equals 1 to 30 and read in data `./result/[char_name]_j_model_full.rda`;
 
@@ -325,7 +325,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows comparisons between ensemble ELN model v.s. ELN model, ELN model v.s. SVM model, and ensemble ELN model v.s. SVM model;
 
-- store figure 3 `./figure/ensemble_ELN_SVM_plot.pdf`.
+- store figure 3 `./figure/ensemble_ELN_SVM_plot.pdf (Figure6.pdf)`.
     
 - using loop k equals 1 to 30 and read in data `./result/[char_name]_k_model_full.rda`;
 
@@ -333,7 +333,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows histogram of selected variables by ELN model in all three mid-price direction;
 
-- store figure 4 `./figure/barplot.pdf`.
+- store figure 4 `./figure/barplot.pdf (Figure7.pdf)`.
     
         
 </details>
