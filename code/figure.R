@@ -39,14 +39,15 @@ dj30 <- ggplot(daily,aes(Date,Adj.Close)) +
                                         colour = "light gray"), 
         panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                         colour = "light gray"), 
-        axis.text.y= element_text(angle=0, hjust=1, face = "bold",size=10),
-        axis.text.x = element_text(face = "bold", angle=45,size=15),
+        axis.text.y= element_text(angle=0, hjust=1, face = "bold",size=14),
+        axis.text.x = element_text(face = "bold", angle=45,size=16),
         axis.ticks = element_blank(),
-        strip.text.y = element_text(size = 30, colour = "black", angle = -90, face = "bold", hjust=0.5))+
+        axis.title=element_text(size=18))+
         theme(legend.position="none")
 dj30
 dev.off()
 
+# strip.text.y = element_text(size = 30, colour = "black", angle = -90, face = "bold", hjust=0.5),
 
 
 
@@ -82,7 +83,7 @@ for (ii in 1:length(char_name)){
 
 Result <- data.frame(value=c(matrix(result_ensem,ncol=1,nrow=3000)-matrix(result,ncol=1,nrow=3000),matrix(result,ncol=1,nrow=3000)-matrix(result_nofpca,ncol=1,nrow=3000),matrix(result,ncol=1,nrow=3000)-matrix(result_nowin,ncol=1,nrow=3000)),
                      stock=rep(rep(char_name,each=100),3),ensemble=as.character(rep(c('ensemble','non-ensemble'),c(3000,6000))),fpca=rep(c('nofpca','fpca','nofpca'),c(3000,3000,3000)),win=rep(c('window','non-window'),c(6000,3000)),
-                     diff=as.factor(rep(c('Ensemble SVM-Baseline','Baseline-no FPCA','Baseline-no within-window'),each=3000)))
+                     diff=as.factor(rep(c('Ensemble SVM-Baseline','Baseline-no FPCA','Baseline-no Within-window'),each=3000)))
 
 Result$stock <- as.factor(Result$stock)
 
@@ -125,6 +126,7 @@ color2[c(pos2,pos3+30,pos1+60)] <- "#A8A8A8"
 
 Result$type <- as.factor(str_c(Result$diff,Result$stock))
 
+# pdf(file='./figure/Figure5.pdf',width=8,height=4.8)
 pdf(file='./figure/combined_plot.pdf',width=8,height=4.8)
 
 generalplot <- ggplot(Result,aes(x=stock,y=value,fill=type,col=type))+ geom_boxplot(outlier.shape=6,outlier.size=0, notch=T, width = 0.5)+
@@ -132,6 +134,7 @@ generalplot <- ggplot(Result,aes(x=stock,y=value,fill=type,col=type))+ geom_boxp
   facet_grid(cols=vars(diff),scale = "free_y", space="free_y", switch = "y" )+
   scale_fill_manual(values = color1 )+
   scale_color_manual(values =color2 )+
+xlab('Stock')+ylab(NULL)+
   theme(panel.background = element_rect(fill = "white",
                                         colour = "light gray",
                                         size = 0.5, linetype = "solid"),
@@ -139,12 +142,12 @@ generalplot <- ggplot(Result,aes(x=stock,y=value,fill=type,col=type))+ geom_boxp
                                         colour = "light gray"),
         panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                         colour = "light gray"),
-        axis.text.x=element_text(angle=0, hjust=1, size=10, face="bold"),
+        axis.text.x=element_text(angle=30, hjust=1, size=12, face="bold"),
         strip.text.x = element_text(size = 12, face="bold"),
-        axis.text.y=element_text(face="bold"),
+        axis.text.y=element_text(face="bold", size=11),
         axis.ticks = element_blank(),
-        plot.margin = unit(c(0.2, 0.2, 0.2, 0.1), "cm"))+
-  labs(x='Stock')+ylab(NULL)+
+        plot.margin = unit(c(0.2, 0.2, 0.2, 0.1), "cm"),
+       axis.title=element_text(size=14))+
   scale_y_continuous(limits = c(-0.1,0.13))+
   guides(fill=FALSE, col=FALSE)+
   geom_hline(aes(yintercept=0), colour="#990000", linetype="dashed")
@@ -197,6 +200,7 @@ for (ii in 1:length(char_name)){
   print(char)
   # only use F1 score to draw the pictures
   load(paste0('./result/',char,'_full_ensemble_model.rda'))
+#   pdf(file='./figure/Figure7.pdf',width=8,height=4.8)
   if(length(missing[[ii]])==0){
   result_ELN[,ii] <- overall(Accuracy_sum_ELN,Accuracy_sum_ensem_ELN)$x[,3]
   result_ELN_ensem[,ii] <-overall(Accuracy_sum_ELN,Accuracy_sum_ensem_ELN)$y[,3]}
@@ -253,6 +257,7 @@ color2 <- c(rep("#7EC0EE",90))
 color1[c(3*(pos3-1)+1,3*(pos1-1)+2,3*pos2)] <- "#ADADAD"
 color2[c(3*(pos3-1)+1,3*(pos1-1)+2,3*pos2)] <- "#A8A8A8"
 pdf(file='./figure/ensemble_ELN_SVM_plot.pdf',width=8,height=4.8)
+# pdf(file='./figure/Figure7.pdf',width=8,height=4.8)
 Appendix_plot2 <- ggplot(Appendix_Result22,aes(x=stock,y=value,fill=diff,col=diff))+ geom_boxplot(outlier.shape=16,outlier.size=0, notch=T, width = 0.5)+coord_flip()+
   facet_grid(cols=vars(type),scale = "free_x", space="free_y", switch = "y" )+
   scale_fill_manual(values = color1)+
@@ -264,12 +269,13 @@ Appendix_plot2 <- ggplot(Appendix_Result22,aes(x=stock,y=value,fill=diff,col=dif
                                         colour = "light gray"),
         panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                         colour = "light gray"),
-        axis.text.x=element_text(angle=0, hjust=1, size=10, face="bold"),
+        axis.text.x=element_text(angle=30, hjust=1, size=12, face="bold"),
         strip.text.x = element_text(size = 12, face="bold"),
-        axis.text.y=element_text(face="bold"),
+        axis.text.y=element_text(face="bold", size=11),
         axis.ticks = element_blank(),
-        plot.margin = unit(c(0.2, 0.2, 0.2, 0.1), "cm"))+
-  labs(x='Stock')+ylab(NULL)+
+        plot.margin = unit(c(0.2, 0.2, 0.2, 0.1), "cm"),
+       axis.title=element_text(size=14))+
+  xlab('Stock')+ylab(NULL)+
 #   scale_y_continuous(limits = c(-0.25,0.3))+
   guides(fill="none", col="none")
 Appendix_plot2+geom_hline(aes(yintercept=0), colour="#990000", linetype="dashed")
@@ -352,6 +358,7 @@ for(i in 1:length(char_name)){
   
   
   pdf(file='./figure/barplot.pdf',width=10,height=7)
+# pdf(file='./figure/Figure6.pdf',width=8,height=4.8)
   ggplot(Result_barplot, mapping=aes(x = selected, y = Frequency))+
     geom_bar(stat = 'identity')+
     # scale_color_manual(values=c("#15c3c9","#f87b72"))+
@@ -370,21 +377,10 @@ for(i in 1:length(char_name)){
                                           colour = "light gray"), 
           panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                           colour = "light gray"), 
-          axis.text.y=element_text(angle=0, hjust=1, face = "bold",size=10),
-          axis.text.x = element_text(face = "bold", angle=30,hjust=1,size=10),
+          axis.text.y=element_text(angle=0, hjust=1, face = "bold",size=12),
+          axis.text.x = element_text(face = "bold", angle=30,hjust=1,size=12),
           axis.ticks = element_blank(),
-          strip.text.y = element_text(size = 10, colour = "black", angle = 270, face = "bold", hjust=0.5))+ 
+          strip.text.y = element_text(size = 13, colour = "black", angle = 270, face = "bold", hjust=0.5),
+         axis.title=element_text(size=15))+ 
     theme(legend.position="none")
 dev.off()
-
-
-
-
-
-
-
-
-
-
-
-
