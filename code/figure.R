@@ -83,7 +83,8 @@ for (ii in 1:length(char_name)){
 
 Result <- data.frame(value=c(matrix(result_ensem,ncol=1,nrow=3000)-matrix(result,ncol=1,nrow=3000),matrix(result,ncol=1,nrow=3000)-matrix(result_nofpca,ncol=1,nrow=3000),matrix(result,ncol=1,nrow=3000)-matrix(result_nowin,ncol=1,nrow=3000)),
                      stock=rep(rep(char_name,each=100),3),ensemble=as.character(rep(c('ensemble','non-ensemble'),c(3000,6000))),fpca=rep(c('nofpca','fpca','nofpca'),c(3000,3000,3000)),win=rep(c('window','non-window'),c(6000,3000)),
-                     diff=as.factor(rep(c('Ensemble SVM-Baseline','Baseline-no FPCA','Baseline-no Within-window'),each=3000)))
+                     diff=as.factor(rep(c("F1 diff: Ensemble",'F1 diff: FPCA','F1 diff: Within-window vars'),each=3000)))
+
 
 Result$stock <- as.factor(Result$stock)
 
@@ -120,11 +121,12 @@ pos3 <- which(levels(Result$stock)%in%char_name[which(test3 %>% unlist()>0.05)])
 # #9ECAE1"
 color1 <- c(rep("#9ECAE1",90))
 color2 <- c(rep("#7EC0EE",90))
-color1[c(pos2,pos3+30,pos1+60)] <- "#ADADAD"
-color2[c(pos2,pos3+30,pos1+60)] <- "#A8A8A8"
+color1[c(pos1,pos2+30,pos3+60)] <- "#ADADAD"
+color2[c(pos1,pos2+30,pos3+60)] <- "#A8A8A8"
 # try to combine the three plots together
 
-Result$type <- as.factor(str_c(Result$diff,Result$stock))
+# Result$type <- as.factor(str_c(Result$diff,Result$stock))
+Result$type <- str_c(Result$diff,Result$stock)
 
 # pdf(file='./figure/Figure5.pdf',width=8,height=4.8)
 pdf(file='./figure/combined_plot.pdf',width=8,height=4.8)
@@ -148,7 +150,7 @@ xlab('Stock')+ylab(NULL)+
         axis.ticks = element_blank(),
         plot.margin = unit(c(0.2, 0.2, 0.2, 0.1), "cm"),
        axis.title=element_text(size=14))+
-  scale_y_continuous(limits = c(-0.1,0.13))+
+  scale_y_continuous(limits = c(-0.1,0.15))+
   guides(fill=FALSE, col=FALSE)+
   geom_hline(aes(yintercept=0), colour="#990000", linetype="dashed")
 
@@ -244,7 +246,7 @@ Appendix_Result2 <- data.frame(value=matrix(result_ELN_ensem,ncol=1,nrow=3000)-m
 Appendix_Result3 <- data.frame(value=matrix(result_ELN,ncol=1,nrow=3000)-matrix(result,ncol=1,nrow=3000),stock=rep(char_name,each=100))
 
 Appendix_Result22 <- rbind(Appendix_Result1, Appendix_Result2,Appendix_Result3)
-Appendix_Result22$type <- as.factor(rep(c("Ensemble ELN-ELN","Ensemble ELN-SVM","ELN-SVM"),each=3000))
+Appendix_Result22$type <- as.factor(rep(c("F1 diff: Ensemble ELN-ELN","F1 diff: Ensemble ELN-SVM","F1 diff: ELN-SVM"),each=3000))
 Appendix_Result22$diff <- as.factor(str_c(Appendix_Result22$stock,Appendix_Result22$type))
 # levels(Appendix_Result22$diff) <- as.factor(c(str_c(levels(Appendix_Result22$stock),1),str_c(levels(Appendix_Result22$stock),2)))
 Appendix_Result22$stock <- as.factor(Appendix_Result22$stock)
@@ -351,7 +353,7 @@ for(i in 1:length(char_name)){
   levels(Result_barplot$selected) <- c('Arrival Rate', 'Best Bid Price', 'Best Bid Size', 'Daily FPCA (d1)',
                                        'Daily FPCA (d2)','Ask Price Derivative', 'Ask Volume Derivative', 'Bid Price Derivative', 
                                        'Bid Volume Derivative',
-                                       'Mid-price Derivative', 'Mid-price', 'Best Ask Size', 'Weekly FPCA (d1)',
+                                       'Mid-price Derivative', 'Mid-price', 'Best Ask Price','Best Ask Size', 'Weekly FPCA (d1)',
                                        'Weekly FPCA (d2)', 'Ask Price Depth', 'Best Ask Price Difference Return', 'Bid-ask Spread Crossing Return',
                                        'Bid-ask Spread Return', 'Bid Price Depth', 'Best Bid Price Difference Return', 'Mean Ask Price',
                                        'Mean Bid Price', 'Mean Mid-price', 'Within-Window Standard Deviation', 'Window Slope')

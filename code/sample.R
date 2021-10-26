@@ -118,12 +118,14 @@ for(jj in 1:length(char_name) ){
   test_sample <- F_test_temp[index==1,]
   train_sample <- F_test_temp[index!=1,]
   
-  
+time <- Sys.time()  
   ################################################
   # baseline model with SVM
   ################################################
   svmfit <- svm(label~.,data=train_sample,kernel="polynomial",degree=2,coef0=1,cost=0.25,scale=F,na.action = na.omit)
+time_SVM_fit <- Sys.time()-time
   fit.pre <- predict(svmfit,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]))
+time_SVM_predict <- Sys.time()-time_SVM_fit
   
   if(sum(fit.pre=='U')==0) P_U <- 0 else P_U  <- length(intersect(which(fit.pre=='U'),which(test_sample$label=='U')))/sum(fit.pre=='U')
   if(sum(fit.pre=='S')==0) P_S <- 0 else P_S  <- length(intersect(which(fit.pre=='S'),which(test_sample$label=='S')))/sum(fit.pre=='S')
@@ -177,7 +179,7 @@ for(jj in 1:length(char_name) ){
   F1_D  <- 2*P_D *R_D /(P_D +R_D )
   Accuracy_nowin <- list(P_U,P_S,P_D,R_U,R_S,R_D,F1_U,F1_S,F1_D)
   
-  save(test_sample,train_sample,svmfit,Accuracy,svmfit_nofpca,Accuracy_nofpca,svmfit_nowin,Accuracy_nowin,file=paste0('./result/', char,'_',i,'_model_svm.rda'))
+  save(test_sample,train_sample,svmfit,Accuracy,svmfit_nofpca,Accuracy_nofpca,svmfit_nowin,Accuracy_nowin,time_SVM_fit, time_SVM_predict, file=paste0('./result/', char,'_',i,'_model_svm.rda'))
 }
 
 

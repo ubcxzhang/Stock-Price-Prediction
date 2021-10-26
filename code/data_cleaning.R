@@ -131,17 +131,10 @@ for(ii in 1:length(char_name)){
   
   # create FPCA that account for 99% of the variances
   for(t in 1:num){
-    fpca.test <- vector()
-    
-    for(i in 1:length(fre)){
+      fpca.test <- vector()
+      for(i in 1:length(fre)){
       if(i==1){fpca.test[i]<- NA}
-      else if(length(Flies$Lt[[i-1]])<8){
-        ord<- Flies$Lt[[i-1]]
-        fpca.test[i] <- Flies$Ly[[i-1]]%*%fpcaObjFlies$phi[,t][unlist(lapply(as.numeric(ord),function(x){which(grepl(x,c(9:16)))}))]
-        
-      }
-      else {fpca.test[i] <- Flies$Ly[[i-1]]%*%fpcaObjFlies$phi[,t]
-      }
+      else {fpca.test[i] <- fpcaObjFlies$xiEst[i-1,t]}
     }
     
     # stock is a data.table, so it's different to assign it a variable
@@ -194,17 +187,12 @@ for(ii in 1:length(char_name)){
   # create FPCA that account for 99% of the variances
   # ATTENTION! we no longer use the "i-1" as the "daily_m1_fpca"s is because that when we construct
   # the variable longterm2, it contains the weekly lag
-  for(t in 1:num){
-    fpca.test <- vector()
-    
-    for(i in 1:(length(fre)-5)){
-      if(length(Flies2$Lt[[i]])<40){
-        fpca.test[i] <- Flies2$Ly[[i]]%*%fpcaObjFlies2$phi[,t][Flies2$Lt[[i]]]  
-      }
-      else {fpca.test[i] <- Flies2$Ly[[i]]%*%fpcaObjFlies2$phi[,t]
-      }
-    }
-    
+    for(t in 1:num){
+      fpca.test <- vector()
+      for(i in 1:(length(fre)-5)){
+      
+     fpca.test[i] <- fpcaObjFlies2$xiEst[i,t]}
+     
     # stock is a data.table, so it's different to assign it a variable
     stock[,paste0("weekly_m1_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.numeric(table(stock$date))[6:64]))
   }
@@ -236,23 +224,33 @@ for(ii in 1:length(char_name)){
   num <- min(which(cumsum(fpcaObjFlies3$lambda/sum(fpcaObjFlies3$lambda))>0.99))
   
   # create FPCA that account for 99% of the variances
-  for(t in 1:num){
-    fpca.test <- vector()
+#   for(t in 1:num){
+#     fpca.test <- vector()
     
-    for(i in 1:length(Flies3$Ly)){
+#     for(i in 1:length(Flies3$Ly)){
+#       if(i==1){fpca.test[i]<- NA}
+#       else{ 
+#         if(length(Flies3$Lt[[i]])<8){
+#         fpca.test[i] <- Flies3$Ly[[i]]%*%fpcaObjFlies3$phi[,t][Flies3$Lt[[i]]]
+#       }
+#       else {fpca.test[i] <- Flies3$Ly[[i]]%*%fpcaObjFlies3$phi[,t]}
+#         }
+#     }
+#     # stock is a data.table, so it's different to assign it a variable
+#     stock[,paste0("daily_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[9:(64*8)]))
+#   }
+  
+  for(t in 1:num){
+      fpca.test <- vector()
+      for(i in 1:length(Flies3$Ly)){
       if(i==1){fpca.test[i]<- NA}
-      else{ 
-        if(length(Flies3$Lt[[i]])<8){
-        fpca.test[i] <- Flies3$Ly[[i]]%*%fpcaObjFlies3$phi[,t][Flies3$Lt[[i]]]
-      }
-      else {fpca.test[i] <- Flies3$Ly[[i]]%*%fpcaObjFlies3$phi[,t]}
-        }
+      else {fpca.test[i] <- fpcaObjFlies3$xiEst[i,t]}
     }
+    
     # stock is a data.table, so it's different to assign it a variable
-    stock[,paste0("daily_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[9:(64*8)]))
-  }
-  
-  
+      stock[,paste0("daily_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[9:(64*8)]))
+    
+}
   
   ##########################################################
   # longterm4d variable 4-------------------------------
@@ -283,20 +281,31 @@ for(ii in 1:length(char_name)){
   # create FPCA that account for 99% of the variances
   # ATTENTION! we no longer use the "i-1" as the "daily_m1_fpca"s is because that when we construct
   # the variable longterm2, it contains the weekly lag
-  for(t in 1:num){
-    fpca.test <- vector()
+#   for(t in 1:num){
+#     fpca.test <- vector()
+#     
+#     for(i in 1:length(Flies4$Ly)){
+#       if(length(Flies4$Lt[[i]])<40){
+#         fpca.test[i] <- Flies4$Ly[[i]]%*%fpcaObjFlies4$phi[,t][Flies4$Lt[[i]]]  
+#       }
+#       else {fpca.test[i] <- Flies4$Ly[[i]]%*%fpcaObjFlies4$phi[,t]
+#       }
+#     }
     
-    for(i in 1:length(Flies4$Ly)){
-      if(length(Flies4$Lt[[i]])<40){
-        fpca.test[i] <- Flies4$Ly[[i]]%*%fpcaObjFlies4$phi[,t][Flies4$Lt[[i]]]  
-      }
-      else {fpca.test[i] <- Flies4$Ly[[i]]%*%fpcaObjFlies4$phi[,t]
-      }
-    }
+#     # stock is a data.table, so it's different to assign it a variable
+#     stock[,paste0("weekly_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[(5*8+1):(64*8)]))
+#   }
     
+    for(t in 1:num){
+      fpca.test <- vector()
+      for(i in 1:length(Flies4$Ly)){
+      
+     fpca.test[i] <- fpcaObjFlies4$xiEst[i,t]}
+     
     # stock is a data.table, so it's different to assign it a variable
     stock[,paste0("weekly_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[(5*8+1):(64*8)]))
   }
+  
   
   
   # setwd(file.path(path0,"result"))

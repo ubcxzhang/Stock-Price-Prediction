@@ -20,6 +20,58 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
                'WBA','GS','HD','INTC','IBM','JNJ','JPM','MCD','MRK','NKE','PFE','PG',
                'TRV','UNH','UTX','VZ','V','WMT','DIS')
 
+table.time.svm <- matrix(NA,ncol=30,nrow=100)
+table.time.eln <- matrix(NA,ncol=30,nrow=100)
+
+# single ELN model fitting time
+for (ii in 1:length(char_name)){
+  char <- char_name[ii]
+    print(ii)
+for(i in 1:100){
+test <- try(load(paste0('./result/', char,'_',i,'_model_full.rda')),silent=T)
+  if(class(test)%in%'try-error') next
+table.time.eln[i,ii] <- time_ELN_fit
+}  
+}
+# change minute to seconds
+table.time.eln[which(table.time.eln<10)] <- table.time.eln[which(table.time.eln<10)]*60
+table.time.eln <- colMeans(table.time.eln, na.rm=T)
+
+# single SVM model fitting time
+for (ii in 1:length(char_name)){
+  char <- char_name[ii]
+    print(ii)
+for(i in 1:100){
+test <- try(load(paste0('./result/', char,'_',i,'_model_svm.rda')),silent=T)
+  if(class(test)%in%'try-error') next
+table.time.svm[i,ii] <- time_SVM_fit
+}  
+}
+
+# change minute to seconds
+table.time.svm[which(table.time.svm<10)] <- table.time.svm[which(table.time.svm<10)]*60
+table.time.svm <- colMeans(table.time.svm, na.rm=T)
+
+
+# SVM/ELN model ensemble prediction time
+table.time.ensem <- matrix(NA,ncol=2,nrow=30)
+for (ii in 1:length(char_name)){
+  char <- char_name[ii]
+  print(char)
+  # only use F1 score to draw the pictures
+  load(paste0('./result/', char,'_svm_ensemble_model.rda'))
+  table.time.ensem[ii,1] <- time_SVM
+    
+  load(paste0('./result/',char,'_full_ensemble_model.rda'))
+  table.time.ensem[ii,2] <- time_ELN
+}
+
+time <- cbind(table.time.svm, table.time.eln,table.time.ensem)
+colnames(time) <- c("SVM (sec)", "ELN (sec)", "Ensemble SVM (hr)", "Ensemble ELN (mins)")
+rownames(time) <- char_name
+xtable(time, digits=3)
+
+
 table.baseline <- matrix(NA,ncol=3,nrow=30)
 table.ensem <- matrix(NA,ncol=3,nrow=30)
 table.nofpca <- matrix(NA,ncol=3,nrow=30)

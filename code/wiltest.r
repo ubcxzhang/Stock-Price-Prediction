@@ -215,15 +215,19 @@ getAccuracy <- function(char,x,i,cha,index,cutoff1){
   train_sample <- F_test_temp[index!=1,]
   
   index_t <- createFolds(train_sample$label,5,list=F)
-  
+
+time <- Sys.time()
+
   cvfit <- cv.glmnet2(data.matrix(train_sample[,-which(colnames(train_sample)%in%"label")]),train_sample$label,nfolds=5,family='multinomial',
                       type.measure = 'class',foldid=index_t,alpha=seq(5,10,by=1)/10,lambda=exp(seq(log(10^-8), log(5), length.out=100)),maxit=10000)
   # there is some NA in the relevant sd variable should re-calculate it
   
   fit.glm <- glmnet(data.matrix(train_sample[,-which(colnames(train_sample)%in%"label")]),train_sample$label,lambda=cvfit$lambda.1se,alpha=cvfit$alpha,family='multinomial')
-  
+time_ELN_fit <- Sys.time()-time
+
   fit.pre1 <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="response",s=cvfit$lambda.1se)
-  
+time_ELN_predict <- Sys.time()-time_ELN_fit
+
   fit.pre1 <- matrix(fit.pre1,ncol=3,nrow=nrow(test_sample))
   
   if(length(which(is.na(fit.pre1)))>0) fit.pre1 <- fit.pre1[-which(is.na(fit.pre1)),]
@@ -250,7 +254,7 @@ getAccuracy <- function(char,x,i,cha,index,cutoff1){
   F1_S  <- 2*P_S *R_S /(P_S +R_S )
   F1_D  <- 2*P_D *R_D /(P_D +R_D )
   Accuracy <- list(P_U,P_S,P_D,R_U,R_S,R_D,F1_U,F1_S,F1_D)
-  save(test_sample,train_sample,fit.glm,Accuracy,cvfit,file=paste0('./result/',char,'_',i,'_model_',cha,'.rda'))
+  save(test_sample,train_sample,fit.glm,Accuracy,cvfit,time_ELN_fit,time_ELN_predict, file=paste0('./result/',char,'_',i,'_model_',cha,'.rda'))
   return(Accuracy)
 }
 

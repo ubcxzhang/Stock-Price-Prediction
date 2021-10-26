@@ -26,6 +26,8 @@ for(kk in 1:length(char_name)){
   if(class(test)%in%"try-error") next
   
   stock$spread <- stock$Best_Offer_Price-stock$Best_Bid_Price
+#   delete irregular spread
+  stock <- stock[-which(stock$spread<0),]  
   stock$Best_Bid_Size <- stock$Best_Bid_Size*100
   stock$Best_Offer_Size <- stock$Best_Offer_Size*100
   
