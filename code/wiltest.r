@@ -219,13 +219,13 @@ getAccuracy <- function(char,x,i,cha,index,cutoff1){
 time <- Sys.time()
 
   cvfit <- cv.glmnet2(data.matrix(train_sample[,-which(colnames(train_sample)%in%"label")]),train_sample$label,nfolds=5,family='multinomial',
-                      type.measure = 'class',foldid=index_t,alpha=seq(5,10,by=1)/10,lambda=exp(seq(log(10^-8), log(5), length.out=100)),maxit=10000)
+                      type.measure = 'class',foldid=index_t,alpha=seq(2,8,by=2)/10,lambda=exp(seq(log(10^-8), log(5), length.out=100)),maxit=10000)
   # there is some NA in the relevant sd variable should re-calculate it
   
-  fit.glm <- glmnet(data.matrix(train_sample[,-which(colnames(train_sample)%in%"label")]),train_sample$label,lambda=cvfit$lambda.1se,alpha=cvfit$alpha,family='multinomial')
+  fit.glm <- glmnet(data.matrix(train_sample[,-which(colnames(train_sample)%in%"label")]),train_sample$label,lambda=cvfit$lambda.min,alpha=cvfit$alpha,family='multinomial')
 time_ELN_fit <- Sys.time()-time
 
-  fit.pre1 <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="response",s=cvfit$lambda.1se)
+  fit.pre1 <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="response",s=cvfit$lambda.min)
 time_ELN_predict <- Sys.time()-time_ELN_fit
 
   fit.pre1 <- matrix(fit.pre1,ncol=3,nrow=nrow(test_sample))
@@ -239,9 +239,9 @@ time_ELN_predict <- Sys.time()-time_ELN_fit
     else if(x[1]>x[3]) return('D')
     else return('U')}),silent = T)
   if(class(test)[1]%in%"try-error") {print('error') 
-    fit.pre <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="class",s=cvfit$lambda.1se)}
+    fit.pre <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="class",s=cvfit$lambda.min)}
   }
-  else fit.pre <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="class",s=cvfit$lambda.1se)
+  else fit.pre <- predict(fit.glm,as.matrix(test_sample[,-which(colnames(train_sample)%in%"label")]),type="class",s=cvfit$lambda.min)
   
   
   if(sum(fit.pre=='U',na.rm=T)==0) P_U <- 0 else P_U  <- length(intersect(which(fit.pre=='U'),which(test_sample$label=='U')))/sum(fit.pre=='U',na.rm=T)
@@ -254,7 +254,7 @@ time_ELN_predict <- Sys.time()-time_ELN_fit
   F1_S  <- 2*P_S *R_S /(P_S +R_S )
   F1_D  <- 2*P_D *R_D /(P_D +R_D )
   Accuracy <- list(P_U,P_S,P_D,R_U,R_S,R_D,F1_U,F1_S,F1_D)
-  save(test_sample,train_sample,fit.glm,Accuracy,cvfit,time_ELN_fit,time_ELN_predict, file=paste0('./result/',char,'_',i,'_model_',cha,'.rda'))
+  save(test_sample,train_sample,fit.glm,Accuracy,cvfit,time_ELN_fit,time_ELN_predict, file=paste0('./result/',char,'_',i,'_eln_',cha,'.rda'))
   return(Accuracy)
 }
 
