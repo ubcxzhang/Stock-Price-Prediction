@@ -27,7 +27,7 @@ for(kk in 1:length(char_name)){
   
   stock$spread <- stock$Best_Offer_Price-stock$Best_Bid_Price
 #   delete irregular spread
-  stock <- stock[-which(stock$spread<0),]  
+  if(sum(stock$spread<0)>0) stock <- stock[-which(stock$spread<0),]  
   stock$Best_Bid_Size <- stock$Best_Bid_Size*100
   stock$Best_Offer_Size <- stock$Best_Offer_Size*100
   
@@ -40,45 +40,48 @@ for(kk in 1:length(char_name)){
   features <- list()
   
   # the original bid/ask prices/ volume
-  k <- 5 # we set the level of the variables, we have fixed the interval is 10 events
+  k <- 5 # we set the level of the variables, we have fixed the interval is 5 events
+    
+#   for basic variables sets, data points come from the previous record points
+  # variable set 1--Prices and volume (1 level)
+  features[[1]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Bid_Price,1,type='lag'))),nrow=length(stock$Best_Bid_Price),ncol=1)
   
-  # variable 1--Prices and volume (1 level)
-  features[[1]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Bid_Price,k,type='lag'))),nrow=length(stock$Best_Bid_Price),ncol=1)
+  features[[2]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Offer_Price,1,type='lag'))),nrow=length(stock$Best_Offer_Price),ncol=1)
   
-  features[[2]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Offer_Price,k,type='lag'))),nrow=length(stock$Best_Offer_Price),ncol=1)
+  features[[3]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Bid_Size,1,type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=1)
   
-  features[[3]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Bid_Size,k,type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=1)
-  
-  features[[4]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Offer_Size,k,type='lag'))),nrow=length(stock$Best_Offer_Size),ncol=1)
+  features[[4]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Offer_Size,1,type='lag'))),nrow=length(stock$Best_Offer_Size),ncol=1)
   
   features[[5]] <- (unlist(features[[1]])+unlist(features[[2]]))/2
   
-  # variable 2--bid-ask spread return
-  features[[6]] <-  matrix(cbind(unlist(data.table::shift(stock$spread,k,type='lag'))),nrow=length(stock$spread),ncol=1)/unlist(features[[5]])
+  # variable set 2--bid-ask spread return
+  features[[6]] <-  matrix(cbind(unlist(data.table::shift(stock$spread,1,type='lag'))),nrow=length(stock$spread),ncol=1)/unlist(features[[5]])
   
   # variable 3--variables made up (only for window data)
-  features[[7]] <- (unlist(features[[1]])-matrix(data.table::shift(stock$Best_Bid_Price,(2*k-1),type='lag'),nrow=length(stock$Best_Bid_Price),ncol=1))/matrix(data.table::shift(stock$Best_Bid_Price,(2*k-1),type='lag'),nrow=length(stock$Best_Bid_Price),ncol=1)
+  features[[7]] <- (unlist(features[[1]])-matrix(data.table::shift(stock$Best_Bid_Price,k,type='lag'),nrow=length(stock$Best_Bid_Price),ncol=1))/matrix(data.table::shift(stock$Best_Bid_Price,k,type='lag'),nrow=length(stock$Best_Bid_Price),ncol=1)
   
-  features[[8]] <- (unlist(features[[2]])-matrix(data.table::shift(stock$Best_Offer_Price,(2*k-1),type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1))/matrix(data.table::shift(stock$Best_Offer_Price,(2*k-1),type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1)
+  features[[8]] <- (unlist(features[[2]])-matrix(data.table::shift(stock$Best_Offer_Price,k,type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1))/matrix(data.table::shift(stock$Best_Offer_Price,k,type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1)
   
-  features[[9]] <- (unlist(features[[1]])-matrix(data.table::shift(stock$Best_Offer_Price,(2*k-1),type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1))/matrix(data.table::shift(stock$Best_Offer_Price,(2*k-1),type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1)
+  features[[9]] <- (unlist(features[[1]])-matrix(data.table::shift(stock$Best_Offer_Price,k,type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1))/matrix(data.table::shift(stock$Best_Offer_Price,k,type='lag'),nrow=length(stock$Best_Offer_Price),ncol=1)
            
-  features[[10]] <- rowMeans(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Bid_Price),k:(2*k-1),type='lag'))),nrow=length(stock$Best_Bid_Price),ncol=k),na.rm=T)
+  features[[10]] <- rowMeans(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Bid_Price),1:k,type='lag'))),nrow=length(stock$Best_Bid_Price),ncol=k),na.rm=T)
   
   
-  features[[11]] <- rowMeans(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Offer_Price),k:(2*k-1),type='lag'))),nrow=length(stock$Best_Offer_Price),ncol=k),na.rm=T)
+  features[[11]] <- rowMeans(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Offer_Price),1:k,type='lag'))),nrow=length(stock$Best_Offer_Price),ncol=k),na.rm=T)
   
-  features[[12]] <- rowMeans(matrix(cbind(unlist(data.table::shift(as.data.table(stock$midprice),k:(2*k-1),type='lag'))),nrow=length(stock$midprice),ncol=k),na.rm=T)
+  features[[12]] <- rowMeans(matrix(cbind(unlist(data.table::shift(as.data.table(stock$midprice),1:k,type='lag'))),nrow=length(stock$midprice),ncol=k),na.rm=T)
   
-  features[[13]] <- rowSums(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Bid_Size),k:(2*k-1),type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=k),na.rm=T)
+  features[[13]] <- rowSums(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Bid_Size),1:k,type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=k),na.rm=T)
   
   
-  features[[14]] <- rowSums(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Offer_Size),k:(2*k-1),type='lag'))),nrow=length(stock$Best_Offer_Size),ncol=k),na.rm=T)
+  features[[14]] <- rowSums(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Offer_Size),1:k,type='lag'))),nrow=length(stock$Best_Offer_Size),ncol=k),na.rm=T)
           
-  features[[15]] <- matrix(cbind(unlist(data.table::shift(as.data.table(features[[5]]),0:9,type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=k)        
-  features[[15]] <- apply(features[[15]], 1, sd)
+#   features[[15]] <- matrix(cbind(unlist(data.table::shift(as.data.table(features[[5]]),0:9,type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=k)  
+#     there are too many 0s in the sd of one window, so the variable is constructed based on two previous windows
+    features[[15]] <- matrix(cbind(unlist(data.table::shift(as.data.table(stock$midprice),1:(2*k),type='lag'))),nrow=length(stock$midprice),ncol=(2*k)) 
+  features[[15]] <- apply(features[[15]], 1, function(x) sd(x, na.rm=T))
   
-  # variable 4--window slope (only for window data) 
+  # variable 4--trade intensity (window slope) (only for window data) 
   # the problem is how to turn over a gap if a date change, discard the obs that doesn't happend in the same day
   slope1 <-data.frame(date=stock$date,min=stock$min,sec=stock$sec,nano=stock$nanosec)
   min_diff <- as.numeric(diff(slope1$min,lag=(k-1)))
@@ -103,10 +106,10 @@ for(kk in 1:length(char_name)){
   time_diff <- time_diff[1:(length(time_diff)-1)]
   time_diff <- as.numeric(time_diff)
   stock$window_slope <- NA
-  stock$window_slope[(k+1):nrow(stock)] <- 1/time_diff
-  # since the variable represents the k events that happen before the last window
+  stock$window_slope[k:nrow(stock)] <- 1/time_diff
+  # since the variable represents the k events that happen before the next event (Y)
   # so we need to move the time difference 
-  features[[16]] <-matrix(unlist(data.table::shift(as.data.table(stock$window_slope,10,type='lag'))),nrow=length(stock$window_slope),ncol=1)  
+  features[[16]] <-matrix(unlist(data.table::shift(as.data.table(stock$window_slope,1,type='lag'))),nrow=length(stock$window_slope),ncol=1)  
   
   
   # variable 5--liquidity in the most recent 1 second
@@ -170,13 +173,8 @@ for(kk in 1:length(char_name)){
   names_mfeatures <- vector()
   names_mfeatures <- c('bid_price','offer_price','bid_size','offer_size','mid_price',
                        'bid_ask_spread_return',
-                       'bid_diff_return','ask_diff_return','bid_ask_sc_return','mean_bid','mean_ask','mean_mid','ask_depth','bid_depth','sd',
-                       'window_slope',
-                       'arrival_rate',
-                       'dev_bid_p','dev_ask_p','dev_bid_v','dev_ask_v','dev_mid_p')
+                       'bid_diff_return','ask_diff_return','bid_ask_sc_return','mean_bid','mean_ask','mean_mid','ask_depth','bid_depth','sd', 'window_slope', 'arrival_rate', 'dev_bid_p','dev_ask_p','dev_bid_v','dev_ask_v','dev_mid_p')
   
- # when you have done the test, should disable the following relocation 
-  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result_test")
   save(stock,features,names_mfeatures,file=paste0('./result/', char,'_to_sample.rda'))
 }
 
