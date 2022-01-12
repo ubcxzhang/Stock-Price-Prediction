@@ -313,7 +313,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
 - store figure 1 `./figure/dj30.pdf (Figure2.pdf)`.
 
-- using loop i equals 1 to 30 and read in data `./result/[char_name]_svm_ensemble_model.rda`;
+- using loop i equals 1 to 30 and read in data `./result/[char_name]_svm_ensemble_model_daily.rda`;
 
     - produces boxplots using ggplot;
 
@@ -329,7 +329,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
 - store figure 3 `./figure/combined_plot_eln_daily.pdf (Figure4.pdf)`.
     
-- using loop k equals 1 to 30 and read in data `./result/[char_name]_k_model_full.rda`;
+- using loop k equals 1 to 30 and read in data `./result/[char_name]_k_eln_daily.rda`;
 
     - produces barplots using ggplot;
 
