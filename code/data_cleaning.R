@@ -2,13 +2,6 @@
 ###-------------------------------------------
 
 rm(list=ls())
-# set path
-# path0 is your_working_directory
-# path0 <- "/projects/def-ubcxzh/y2huang/midprice_predict/thesis"
-# path0 <- "/project/6003851/y2huang/midprice_predict/thesis"
-# setwd(file.path(path0))
-# setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
-# load packages and sel-defined functions
 library(dbplyr)
 library(data.table)
 library(glmnet)
@@ -25,20 +18,16 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
                'TRV','UNH','UTX','VZ','V','WMT','DIS')
 
 for(ii in 1:length(char_name)){
-  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2")
-  # decide which stock to read
-  # setwd(file.path(path0))
   char <- char_name[ii]
   print(char)
   print(Sys.time())
 
   # show the digits for the variable 'Time'
   stock <- try(fread(file=paste0('/project/6003851/SharedData/NYSE16/GroupingResult/NBBO/EQY_US_ALL_NBBO_',char,'.txt'),sep='|',header=F),silent=T)
-  # if(class(test)[1]%in%'try-error') next
-  # stock <- fread(file=paste0('/project/6003851/SharedData/NYSE16/GroupingResult/NBBO/EQY_US_ALL_NBBO_',char,'.txt'),sep='|',header=F)
-  
+ 
   colnames(stock) <-c('Time','Exchange','Symbol','Bid_Price','Bid_Size','Offer_Price','Offer_Size','Quote_Condition','Best_Bid_Exchange','Best_Bid_Price','Best_Bid_Size','Best_Offer_Price','Best_Offer_Size','Best_Offer_FINRA_Market_Maker_ID')
   str(stock)
+    
   # remove the columns that are useless
   Symbol <- stock$Symbol[1]
   stock <- subset(stock,select=-c(Exchange,Best_Bid_Exchange,Best_Offer_FINRA_Market_Maker_ID,Quote_Condition,Symbol,Bid_Price,Bid_Size,Offer_Price,Offer_Size))
@@ -99,115 +88,25 @@ for(ii in 1:length(char_name)){
   ### we want to compare the difference between the FPCAs under two definitions ###
   ###--------------------------------------------
   
-  # longterm variable 1: daily FPCA under method1
+  # we compute the hourly price using group mean 
   longterm <- aggregate(midprice~date+hour,data=stock,mean)
   longterm <- longterm[order(longterm$date),]
-  
-  # use longterm minus its group average
-    longterm1 <- split(longterm$midprice,longterm$date)
-    longterm1_mean <- aggregate(midprice~hour,data=longterm,mean)[,2]
- # longterm1$midprice <- longterm1$midprice-rep(aggregate(midprice~hour,data=longterm1,mean)[,2], 64)
-    for(t in 1:length(longterm1)){
-    if(length(longterm1[[t]])!=8){
-      num <- as.numeric(longterm$hour[which(longterm$date==names(longterm1)[t])])
-      temp <- rep(NA,8)
-      temp[c(9:16)%in%num] <- longterm1[[t]]-longterm1_mean[c(9:16)%in%num]
-      longterm1[[t]] <- temp
-    }
-        else longterm1[[t]] <- longterm1[[t]]-longterm1_mean
-    
-  }  
-  
-  longterm1 <- unlist(longterm1)
-  longterm1 <- longterm1[!is.na(longterm1)]
-  longterm1 <- data.frame(midprice=unlist(longterm1), date=longterm$date, hour=longterm$hour)  
-  longterm1$month <- substr(longterm$date,5,6) 
-  
-  Flies <- MakeFPCAInputs(longterm1$date, longterm1$hour, longterm1$midprice)
-  fpcaObjFlies <- FPCA(Flies$Ly, Flies$Lt)
-  
-  # to ensure FPCA can explain over 99%
-  num <- min(which(cumsum(fpcaObjFlies$lambda/sum(fpcaObjFlies$lambda))>0.99))
-  
-  # create FPCA that account for 99% of the variances
-  for(t in 1:num){
-      fpca.test <- vector()
-      for(i in 1:length(fre)){
-      if(i==1){fpca.test[i]<- NA}
-      else {fpca.test[i] <- fpcaObjFlies$xiEst[i-1,t]}
-    }
-    
-    # stock is a data.table, so it's different to assign it a variable
-    stock[,paste0("daily_m1_fpca",t)] <- rep(fpca.test,as.numeric(table(stock$date)))
-}
-  
-  
-  ##########################################################
-  # longterm variable 2-----------------------------------
-  # longterm1 <- melt(longterm,id.vars=c('date','hour','midprice'),value.name='midprice',factorsAsStrings = F)
-  # construct a new longterm data.frame for FPCA for a week lag
-  # discard the first 5 bday, every of 59*40 date has a length of 40 obs
-  # ATTENTION! if we change file 'Date', we have to rewrite the number here
+#   split the hourly data 
   longterm2 <- split(longterm$midprice,longterm$date)
-  
-  # use an NA to substitute the missing value and use 'na.rm' in the next step
-  for(t in 1:length(longterm2)){
-    if(length(longterm2[[t]])!=8){
-      num <- as.numeric(longterm$hour[which(longterm$date==names(longterm2)[t])])
-      temp <- rep(NA,8)
-      temp[c(9:16)%in%num] <- longterm2[[t]]
-      longterm2[[t]] <- temp
-    }
-  }
+    
   # price is a variable that store all the hourly price and use NA as the missing values
   price <- as.vector(unlist(longterm2))
-  longterm2 <- data.frame(hour=rep(1:40,59))
-  longterm2$date <- rep(Date[6:64],each=40)
-  for(i in 1:59){
-    xname <- unique(longterm2$date)[i]
-    xorder <- which(Date==xname)-1
-    longterm2$midprice[which(longterm2$date==xname)] <- price[((xorder-5)*8+1):(xorder*8)]
-  }
-  
-  
-  # use longterm minus its mean function
-  # detrend it using the mean of every 40hrs, using mean is much better than median
-  # in the meeting2 Prof.Zhang said we only need to detrend the daily trend and repeat it for a week instead of a weekly trend
-  # ATTENTION! Here we use longterm's midprice, so everything changed in the last variable is related to the next
-  
-  longterm2$midprice <- longterm2$midprice-rep(aggregate(midprice~hour,data=longterm,mean)[,2],295)
-  
-  # find put that it might need 5FPCs to explain the variance
-  Flies2 <- MakeFPCAInputs(longterm2$date, longterm2$hour, longterm2$midprice,na.rm=T)
-  fpcaObjFlies2 <- FPCA(Flies2$Ly, Flies2$Lt)
-  
-  # to ensure FPCA can explain over 99%
-  num <- min(which(cumsum(fpcaObjFlies2$lambda/sum(fpcaObjFlies2$lambda))>0.99))
-  
-  # create FPCA that account for 99% of the variances
-  # ATTENTION! we no longer use the "i-1" as the "daily_m1_fpca"s is because that when we construct
-  # the variable longterm2, it contains the weekly lag
-    for(t in 1:num){
-      fpca.test <- vector()
-      for(i in 1:(length(fre)-5)){
-      
-     fpca.test[i] <- fpcaObjFlies2$xiEst[i,t]}
-     
-    # stock is a data.table, so it's different to assign it a variable
-    stock[,paste0("weekly_m1_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.numeric(table(stock$date))[6:64]))
-  }
-  
-  
   ##########################################################
-  # longterm variable 3-----------------------------------
-  # using the method 2
-  # longterm variable 3 (daily)
-  longterm3 <- aggregate(midprice~date+hour,data=stock,mean)
-  longterm3 <- longterm3[order(longterm3$date),]
+  # daily FPCA
+  ##########################################################
+  
+  longterm3 <- longterm
+#   expect the first 8hrs of the first day, each hour we compute its 8 hrs sequence in var3 
   var3 <- vector()
   for(i in 1:((length(table(longterm3$date))*8-8))){
     var3[((i-1)*8+1):((i-1)*8+8)] <- window(price,start=i,end=(i+7),frequency=1)
   }
+#     construct variable to feed FPCA modelling
   longterm3d <- data.frame(midprice=var3,obs=rep(1:8,(length(table(longterm3$date))*8-8)))
   longterm3d$date <- rep(names(table(longterm3$date))[2:64],each=64)
   longterm3d$hr <- rep(rep(9:16,each=8),63)
@@ -220,42 +119,28 @@ for(ii in 1:length(char_name)){
   Flies3 <- MakeFPCAInputs(longterm3d_dt$id, longterm3d_dt$obs, longterm3d_dt$midprice,na.rm=T)
   fpcaObjFlies3 <- FPCA(Flies3$Ly, Flies3$Lt, list(plot = F, methodMuCovEst = 'smooth', userBwCov = 2))
   
-  # to ensure FPCA can explain over 99%
+  # to ensure FPCA can explain over 99.9%
   num <- min(which(cumsum(fpcaObjFlies3$lambda/sum(fpcaObjFlies3$lambda))>0.99))
   
-  # create FPCA that account for 99% of the variances
 #   for(t in 1:num){
-#     fpca.test <- vector()
-    
-#     for(i in 1:length(Flies3$Ly)){
+#       fpca.test <- vector()
+#       for(i in 1:length(Flies3$Ly)){
 #       if(i==1){fpca.test[i]<- NA}
-#       else{ 
-#         if(length(Flies3$Lt[[i]])<8){
-#         fpca.test[i] <- Flies3$Ly[[i]]%*%fpcaObjFlies3$phi[,t][Flies3$Lt[[i]]]
-#       }
-#       else {fpca.test[i] <- Flies3$Ly[[i]]%*%fpcaObjFlies3$phi[,t]}
-#         }
+#       else {fpca.test[i] <- fpcaObjFlies3$xiEst[i,t]}
 #     }
-#     # stock is a data.table, so it's different to assign it a variable
-#     stock[,paste0("daily_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[9:(64*8)]))
-#   }
-  
-  for(t in 1:num){
+    
+     for(t in 1:num){
       fpca.test <- vector()
-      for(i in 1:length(Flies3$Ly)){
-      if(i==1){fpca.test[i]<- NA}
-      else {fpca.test[i] <- fpcaObjFlies3$xiEst[i,t]}
-    }
+      fpca.test <- fpcaObjFlies3$xiEst[,t]
     
     # stock is a data.table, so it's different to assign it a variable
-      stock[,paste0("daily_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[9:(64*8)]))
+      stock[,paste0("daily_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[9:(64*8)]))
     
 }
-  
   ##########################################################
-  # longterm4d variable 4-------------------------------
-  longterm4d <- aggregate(midprice~date+hour,data=stock,mean)
-  longterm4d <- longterm4d[order(longterm4d$date),]
+  # weekly FPCA
+  ##########################################################
+  longterm4d <- longterm
   
   var4 <- vector()
   for(i in 1:((length(table(longterm4d$date))*8-40))){
@@ -275,41 +160,23 @@ for(ii in 1:length(char_name)){
   Flies4 <- MakeFPCAInputs(longterm4d$id, longterm4d$obs, longterm4d$midprice,na.rm=T)
   fpcaObjFlies4 <- FPCA(Flies4$Ly, Flies4$Lt, list(plot = F, methodMuCovEst = 'smooth', userBwCov = 2))
   
-  # to ensure FPCA can explain over 99%
+  # to ensure FPCA can explain over 99.9%
   num <- min(which(cumsum(fpcaObjFlies4$lambda/sum(fpcaObjFlies4$lambda))>0.99))
-  
-  # create FPCA that account for 99% of the variances
-  # ATTENTION! we no longer use the "i-1" as the "daily_m1_fpca"s is because that when we construct
-  # the variable longterm2, it contains the weekly lag
-#   for(t in 1:num){
-#     fpca.test <- vector()
-#     
-#     for(i in 1:length(Flies4$Ly)){
-#       if(length(Flies4$Lt[[i]])<40){
-#         fpca.test[i] <- Flies4$Ly[[i]]%*%fpcaObjFlies4$phi[,t][Flies4$Lt[[i]]]  
-#       }
-#       else {fpca.test[i] <- Flies4$Ly[[i]]%*%fpcaObjFlies4$phi[,t]
-#       }
-#     }
     
-#     # stock is a data.table, so it's different to assign it a variable
-#     stock[,paste0("weekly_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[(5*8+1):(64*8)]))
-#   }
-    
-    for(t in 1:num){
-      fpca.test <- vector()
-      for(i in 1:length(Flies4$Ly)){
+#     for(t in 1:num){
+#       fpca.test <- vector()
+#       for(i in 1:length(Flies4$Ly)){
       
-     fpca.test[i] <- fpcaObjFlies4$xiEst[i,t]}
+#      fpca.test[i] <- fpcaObjFlies4$xiEst[i,t]}
+      for(t in 1:num){
+     fpca.test <- vector()
+     fpca.test <- fpcaObjFlies4$xiEst[,t]
      
     # stock is a data.table, so it's different to assign it a variable
-    stock[,paste0("weekly_m2_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[(5*8+1):(64*8)]))
+    stock[,paste0("weekly_fpca",t)] <- c(rep(NA,sum(as.numeric(table(stock$date))[1:5])),rep(fpca.test,as.vector(table(stock$hour,stock$date))[(5*8+1):(64*8)]))
   }
   
-  
-  
-  # setwd(file.path(path0,"result"))
-  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result")
+ 
   save(stock,file=paste0('./result/',char,'_final.rda'))
   rm(stock)
 }
