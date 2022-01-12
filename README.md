@@ -46,10 +46,10 @@ all the **raw datasets** from New York Stock Exchange are stored at the director
     ├── code  
     │    ├── data_cleaning.R		    # clean the raw data 
     │ 	 ├── feature_encoding.R 		# feature construction
-    │ 	 ├── sample.R 			        # single experiments with SVM model
-    │ 	 ├── sample_ELN_full.R			# single experiments with ELN model    
-    │ 	 ├── ensemble_svm.R			# ensemble 100 results with SVM model    
-    │ 	 ├── ensemble_ELN.R			# ensemble 100 results with ELN model    
+    │ 	 ├── sample_daily.R 			        # single experiments with SVM model
+    │ 	 ├── sample_ELN_daily.R			# single experiments with ELN model    
+    │ 	 ├── ensemble_svm_daily.R			# ensemble 100 results with SVM model    
+    │ 	 ├── ensemble_ELN_daily.R			# ensemble 100 results with ELN model    
     │ 	 ├── figure.R			# Wilcoxon Sign Rank Test and Visualizations    
     │ 	 ├── appendix_table.R		        # Visualizations
     │ 	 └── wiltest.r  	        # Tool box with customized R functions					
@@ -66,10 +66,10 @@ all the **raw datasets** from New York Stock Exchange are stored at the director
     ├── sh  
     │    ├── data_cleaning.sh		# sh files
     │ 	 ├── feature_encoding.sh					
-    │ 	 ├── sample_svm.sh 			
-    │ 	 ├── sample_ELN_full.sh 			
-    │ 	 ├── ensemble_svm.sh
-    │ 	 ├── ensemble_ELN.sh
+    │ 	 ├── sample_svm_daily.sh 			
+    │ 	 ├── sample_ELN_daily.sh 			
+    │ 	 ├── ensemble_svm_daily.sh
+    │ 	 ├── ensemble_ELN_daily.sh
     │ 	 ├── figure.sh
     │ 	 └── appendix_table.sh				
 </details>
@@ -78,10 +78,10 @@ all the **raw datasets** from New York Stock Exchange are stored at the director
     ├──  log files after submitting jobs
     │    ├── data_cleaning.Rout		    # log file for data_cleaning.sh
     │ 	 ├── feature_encoding.Rout		# log file for feature_encoding.sh
-    │ 	 ├── sample_svm.i.Rout 			# log file for sample_svm.sh for each seed i (i=1,...,100)
-    │ 	 ├── sample_ELN_full.i.Rout	    # log file for sample_ELN_full.sh for each seed i (i=1,...,100)     
-    │ 	 ├── ensemble_svm.Rout			# log file for ensemble_svm.sh 
-    │ 	 ├── ensemble_ELN.Rout 		    # log file for ensemble_ELN.sh
+    │ 	 ├── sample_svm_daily.i.Rout 			# log file for sample_svm.sh for each seed i (i=1,...,100)
+    │ 	 ├── sample_ELN_daily.i.Rout	    # log file for sample_ELN_full.sh for each seed i (i=1,...,100)     
+    │ 	 ├── ensemble_svm_daily.Rout			# log file for ensemble_svm.sh 
+    │ 	 ├── ensemble_ELN_daily.Rout 		    # log file for ensemble_ELN.sh
     │ 	 ├── figure.Rout                # log file for figure.sh
     │ 	 └── appendix_table.Rout        # log file for appendix_table.sh, generated Latex tables will be stored here
 </details>
@@ -90,20 +90,22 @@ all the **raw datasets** from New York Stock Exchange are stored at the director
     ├──  intermedia result
     │    ├── [stock_name]_final.rda		    # after cleaning the raw data for each component stock 
     │ 	 ├── [stock_name]_to_sample.rda		# feature construction for each component stock
-    │ 	 ├── [stock_name]_i_model_svm.rda 			# single experiments with SVM model for each component stock (i=1,...,100)
-    │ 	 ├── [stock_name]_i_model_full.rda			# single experiments with ELN model for each component stock (i=1,...,100)    
+    │ 	 ├── [stock_name]_i_model_svm_daily.rda 			# single experiments with SVM model for each component stock (i=1,...,100)
+    │ 	 ├── [stock_name]_i_eln_daily.rda			# single experiments with ELN model for each component stock (i=1,...,100)    
+    │ 	 ├── [stock_name]_i_eln_nofpca_daily.rda			  
+    │ 	 ├── [stock_name]_i_eln_nowin_daily.rda			    
     ├──  final result 
-    │ 	 ├── [stock_name]_svm_ensemble_model.rda			# ensemble 100 results with SVM model for each component stock        	
-    │ 	 └── [stock_name]_full_ensemble_model.rda 		    # ensemble 100 results with ELN model for each component stock
+    │ 	 ├── [stock_name]_svm_ensemble_model_daily.rda			# ensemble 100 results with SVM model for each component stock        	
+    │ 	 └── [stock_name]_eln_ensemble_model_daily.rda 		    # ensemble 100 results with ELN model for each component stock
 </details>
 
 <details><summary>figure</summary>
 
     ├── figure    
-    │ 	 ├── combined_plot.pdf (Figure5.pdf)
-    │ 	 ├── ensemble_ELN_SVM_plot.pdf (Figure6.pdf)
-    │ 	 ├── barplot.pdf (Figure7.pdf)
-    │ 	 └── dj30.pdf (Figure4.pdf)					
+    │ 	 ├── combined_plot_daily.pdf (Figure3.pdf)
+    │ 	 ├── combined_plot_eln_daily.pdf (Figure4.pdf)
+    │ 	 ├── barplot.pdf (Figure5.pdf)
+    │ 	 └── dj30.pdf (Figure2.pdf)					
 </details>
 
 
@@ -162,12 +164,12 @@ If you are not sure about the path of your working folder, try to type in 'pwd' 
 
 ![image2](https://github.com/ubcxzhang/Stock-Price-Prediction/blob/master/illustration2.png)
 
-5. in the main directory, use the following commands to load R/4.0.2 language in Compute Canada:
+5. in the main directory, use the following commands to load R/4.0.2 language in Compute Canada (The environment settings in CC change occasionally, make sure to check and use their latest settings):
 ~~~
-module load nixpkgs/16.09	
-module load gcc/7.3.0	
-module spider r/4.0.2	
-module load r/4.0.2	
+module load StdEnv/2020
+module load gcc/9.3.0 r/4.0.2
+module load python/3.7
+source $HOME/jupyter_py3/bin/activate
 ~~~
 4. before we run the .sh files, we use in the following commands in R (version 4.0.2) to install some R packages needed for the task
 ~~~
@@ -237,7 +239,7 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
     - calculate Recall, Precision and F1 score for each experiment above;
 
-- save file `./result/[stock_name]_i_model_svm.rda`.
+- save file `./result/[stock_name]_i_model_svm_daily.rda`.
     
 </details>
 
@@ -257,20 +259,20 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
     - calculate Recall, Precision and F1 score with the application of manually defined function "get Accuracy" from "wiltest.r";
 
-- save file `./result/[stock_name]_i_model_full.rda`.
+- save file `./result/[stock_name]_i_eln_daily.rda`, `./result/[stock_name]_i_eln_nofpca_daily.rda`, and `./result/[stock_name]_i_eln_nowin_daily.rda`.
 
 </details>
 
 ~~~
-    for ii in {1..100}; do sbatch ./sh/sample_svm.sh $ii; done
-    for ii in {1..100}; do sbatch ./sh/sample_ELN_full.sh $ii; done
+    for ii in {1..100}; do sbatch ./sh/sample_svm_daily.sh $ii; done
+    for ii in {1..100}; do sbatch ./sh/sample_ELN_daily.sh $ii; done
  ~~~  
 
 
 <details><summary> 4. ensemble results with SVM model (6 hrs, submit 30 jobs)</summary>
     **SVM model ensemble is too slow, divide it into 30 separate jobs representing 30 targeted stocks**
 
-- using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_svm.rda`;
+- using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_svm_daily.rda`;
 
     - skip experiments that don't have converged results;
 
@@ -278,14 +280,14 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
     - calculate Recall, Precision and F1 score for each ensemble experiment (e.g. baseline model/baseline model without FPCAs/baseline model without "within-window" vars);
 
-- store all accuracy as R file `./result/[stock_name]_svm_ensemble_model.rda`.
+- store all accuracy as R file `./result/[stock_name]_svm_ensemble_model_daily.rda`.
     
 </details>
 
 
 <details><summary> 4a. ensemble results with ELN model (6 hrs)</summary>
 
-- using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_model_full.rda`;
+- using loop i equals 1 to 100 and read in data `./result/[stock_name]_i_eln_daily.rda`;
 
     - skip experiments that don't have converged results;
 
@@ -293,13 +295,13 @@ install.packages(c('dbplyr','data.table','glmnet','fdapace','ggplot2','RColorBre
 
     - calculate Recall, Precision and F1 score for the ensemble experiment (e.g. baseline model with ELN);
 
-- store all accuracy as R file `./result/[stock_name]_full_ensemble_model.rda`.
+- store all accuracy as R file `./result/[stock_name]_eln_ensemble_model_daily.rda`.
         
 </details>
 
 ~~~
-    for ii in {1..30}; do sbatch ./sh/ensemble_svm.sh $ii; done
-    sbatch ./sh/ensemble_ELN.sh
+    for ii in {1..30}; do sbatch ./sh/ensemble_svm_daily.sh $ii; done
+    sbatch ./sh/ensemble_ELN_daily.sh
 ~~~ 
 
 customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix_table.R` produce visualizations and table results, which can be run on local server
@@ -309,7 +311,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - illstrates the daily price change of Dow Jones 30 index;
 
-- store figure 1 `./figure/dj30.pdf (Figure4.pdf)`.
+- store figure 1 `./figure/dj30.pdf (Figure2.pdf)`.
 
 - using loop i equals 1 to 30 and read in data `./result/[char_name]_svm_ensemble_model.rda`;
 
@@ -317,15 +319,15 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows comparisons between baseline model v.s. ensemble model, baseline model v.s. no FPCA model, and baseline model v.s. no within-window model;
 
-- store figure 2 `./figure/combined_plot.pdf (Figure5.pdf)`.
+- store figure 2 `./figure/combined_plot_daily.pdf (Figure3.pdf)`.
 
-- using loop j equals 1 to 30 and read in data `./result/[char_name]_j_model_full.rda`;
+- read in data `./result/[stock_name]_i_eln_daily.rda`, `./result/[stock_name]_i_eln_nofpca_daily.rda`, and `./result/[stock_name]_i_eln_nowin_daily.rda`;
 
     - produces boxplots using ggplot;
 
-    - shows comparisons between ensemble ELN model v.s. ELN model, ELN model v.s. SVM model, and ensemble ELN model v.s. SVM model;
+    - shows comparisons between baseline model v.s. ensemble eln model, baseline model v.s. no FPCA model, and baseline model v.s. no within-window model;
 
-- store figure 3 `./figure/ensemble_ELN_SVM_plot.pdf (Figure6.pdf)`.
+- store figure 3 `./figure/combined_plot_eln_daily.pdf (Figure4.pdf)`.
     
 - using loop k equals 1 to 30 and read in data `./result/[char_name]_k_model_full.rda`;
 
@@ -333,7 +335,7 @@ customized R functions are defined in `wiltest.R` file; `figure.R` and `appendix
 
     - shows histogram of selected variables by ELN model in all three mid-price direction;
 
-- store figure 4 `./figure/barplot.pdf (Figure7.pdf)`.
+- store figure 4 `./figure/barplot.pdf (Figure5.pdf)`.
     
         
 </details>
