@@ -221,8 +221,8 @@ for (ii in 1:length(char_name)){
   result[flag,ii] <- overall(Accuracy_sum_ELN,Accuracy_sum_ensem_ELN)$x[,3]
   result_ensem[flag,ii] <-overall(Accuracy_sum_ELN,Accuracy_sum_ensem_ELN)$y[,3]
   
-  # load(paste0('./result/',char,'_eln_summary_daily.rda'))
-  load(paste0('./result/',char,'_eln_ensemble_model_daily.rda'))
+  load(paste0('./result/',char,'_eln_summary_daily.rda'))
+  # load(paste0('./result/',char,'_eln_ensemble_model_daily.rda'))
     
   # In the comparison between baseline model and nofpca, valid sample sizes are saved model without fpca failures intersect{flag, (flag_nofpca-flag_nofpca_NA)}    
   if(length(intersect(flag_nowin_NA, flag_nowin_NA))!=0) flag_nowin = flag_nowin[-flag_nowin_NA]
