@@ -18,7 +18,6 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
 for(jj in 1:length(char_name)){
   time <- Sys.time()
   char <- char_name[jj] 
-  # cutoff_stock <- as.numeric(cutoff[jj])
   print(char)
   print(Sys.time())
 Accuracy_sum2 <- model_sum1<-test_sum1 <-Accuracy_sum_ensem_ELN <-list()
@@ -40,7 +39,6 @@ model_sum <- model_sum1[flag]
 test_sum <- test_sum1[flag]
 
   
-# Attention! the value of nrow will change if the spliting change in sample
 fit.pre.sum <- fit.pre.sum.prob <- matrix(0,ncol=length(flag),nrow=2000)
 
   ################################################
@@ -63,13 +61,6 @@ for(k in 1:length(flag)){
   # store the probabilities
     fit.pre.sum.prob[,j] <- apply(predict(model_sum[[j]],as.matrix(test_sum[[k]][,-which(colnames(train_sample)%in%"label")]),type='response',s=model_sum[[j]]$lambda),1,max)
     
-  # according to the cutoff value, get the final classification
-    # since this is a no cutoff involved ensemble, only use the original result
-    # if(sum(is.nan(predict(model_sum[[j]],as.matrix(test_sum[[k]][,-which(colnames(train_sample)%in%"label")]),type='response',s=model_sum[[j]]$lambda)))>0){fit.pre.sum[,j] <- predict(model_sum[[j]],as.matrix(test_sum[[k]][,-which(colnames(train_sample)%in%"label")]),type='class',s=model_sum[[j]]$lambda)} 
-    # else {fit.pre.sum[,j] <- apply(predict(model_sum[[j]],as.matrix(test_sum[[k]][,-which(colnames(train_sample)%in%"label")]),type='response',s=model_sum[[j]]$lambda),1,
-    #                          function(x,value=cutoff_stock){if(x[2]>value) return('S')
-    #                            else if(x[1]>x[3]) return('D')
-    #                            else return('U')})}
     
     fit.pre.sum[,j] <- predict(model_sum[[j]],as.matrix(test_sum[[k]][,-which(colnames(train_sample)%in%"label")]),type='class',s=model_sum[[j]]$lambda)
     
