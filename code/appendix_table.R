@@ -1,4 +1,3 @@
-#getwd()
 rm(list=ls())
 
 source('./code/wiltest.r')
