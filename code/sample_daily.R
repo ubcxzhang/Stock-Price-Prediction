@@ -23,7 +23,6 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
 k <- 5
 
 for(jj in 1:length(char_name) ){
-  # setwd(file.path(path0,'result'))
   char <- char_name[jj] 
   print(char)
   test <- try(load(paste0('./result/', char,'_to_sample.rda')))
@@ -51,7 +50,6 @@ for(jj in 1:length(char_name) ){
   
     # define alpha=10^(-5) as the significance level to label our response variable
     a <- 10^(-5)
-#     stock$compare <- unlist(data.table::shift(stock$midprice,-k,type='lag'))
     stock$compare <- rowMeans(data.table(matrix(cbind(unlist(data.table::shift(stock$midprice,-(1:k),type='lag'))),nrow=length(stock$midprice),ncol=k)))
     stock$compare <-  stock$compare/stock$midprice
     stock$label[stock$compare>1+a] <- 'U'
@@ -59,7 +57,7 @@ for(jj in 1:length(char_name) ){
     stock$label[stock$compare>=(1-a)&stock$compare<=(1+a)] <- 'S'
     
     stock <- stock[1:(nrow(stock)-k),]
-    F_test <- F_test[1:(nrow(stock)-k),]
+    F_test <- F_test[1:(nrow(stock)),]
     
     stock <- stock[which(1:nrow(stock)%%k==0),]
     stock$label <- as.factor(stock$label)
