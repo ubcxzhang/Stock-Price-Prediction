@@ -92,9 +92,7 @@ for(ii in 1:length(char_name)){
   # check if the stock file exists
   char <- char_name[ii]
   print(char)
-#   test <- try(load(paste0('./result/',char,'_svm_ensemble_model.rda')),silent=T)
-    test <- try(load(paste0('./result/',char,'_svm_ensemble_model_daily.rda')),silent=T)
-#     test <- try(load(paste0('./result/',char,'_svm_ensemble_model_weekly.rda')),silent=T)
+  test <- try(load(paste0('./result/',char,'_svm_ensemble_model_daily.rda')),silent=T)
   if(class(test)%in%'try-error') next
 
   
@@ -144,9 +142,7 @@ for(ii in 1:length(char_name)){
   # check if the stock file exists
   char <- char_name[ii]
   print(char)
-#   test <- try(load(paste0('./result/',char,'_svm_ensemble_model.rda')),silent=T)
     test <- try(load(paste0('./result/',char,'_eln_ensemble_model_daily.rda')),silent=T)
-#     test <- try(load(paste0('./result/',char,'_svm_ensemble_model_weekly.rda')),silent=T)
     load(paste0('./result/',char,'_eln_summary_daily.rda'))
     Accuracy_sum_nofpca <-  Accuracy_sum_nofpca[flag_nofpca]
     Accuracy_sum_nowin <-  Accuracy_sum_nowin[flag_nowin]
@@ -173,11 +169,6 @@ for(ii in 1:length(char_name)){
   
 }
 
-# The output aims for basic latex format, for prettier table, you need to adjust the code in latex
-# this is for the table in the body, showing the result of baseline SVM model
-# rownames(table.baseline) <- char_name
-# colnames(table.baseline) <- c('P','R','F1')
-# xtable(table.baseline,digits=3)
 
 # this is for the table in the appendix
 table.result <- cbind(table.baseline, table.ensem,table.nofpca,table.nowin)
@@ -196,14 +187,11 @@ TRADE_volume <- list()
 
 for(kk in 1:length(char_name)){
 
-
-#   if(kk>1) rm(list=ls()[-which(ls()%in%c('char_name','kk'))])
   char <- char_name[kk]
   print(char)
   print(Sys.time())
     daily_volume <- try(fread(file=paste0('/project/6003851/SharedData/NYSE16/GroupingResult/TRADE/EQY_US_ALL_TRADE_',char,'.txt'),sep='|',header=F),silent=T)
     daily_volume <- as.data.table(daily_volume)
-#     V5 is the trade volume of each transaction, V10 is the date
     daily_volume$V10 <- as.character(daily_volume$V10)
     daily_volume$V10 <- as.factor(daily_volume$V10)
     
@@ -476,7 +464,6 @@ for(i in 1:length(char_name)){
 }
 
 
-# test_result <- matrix(cbind(unlist(test1), unlist(test2), unlist(test3)), nrow=30)
 test_result <- matrix(cbind(p.adjust(unlist(test3), method='fdr'), p.adjust(unlist(test1), method='fdr'), p.adjust(unlist(test2), method='fdr')), nrow=30)
 colnames(test_result) <- c('F1 improvement: Strategy I', 'F1 improvement: Strategy II', 'F1 improvement: Strategy III')
 rownames(test_result) <- char_name
