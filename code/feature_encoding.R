@@ -10,11 +10,9 @@ char_name <- c('AAPL','MSFT','MMM','AXP','BA','CAT','CVX','CSCO','KO','DOW','XOM
 
 for(kk in 1:length(char_name)){
 
-  # setwd("/project/6003851/y2huang/midprice_predict/final_version_2/result")
   library(dbplyr)
   library(data.table)
   library(glmnet)
-  #library(e1071)
   library(fdapace)
   library(bit64)
 
@@ -26,7 +24,7 @@ for(kk in 1:length(char_name)){
   if(class(test)%in%"try-error") next
   
   stock$spread <- stock$Best_Offer_Price-stock$Best_Bid_Price
-#   delete irregular spread
+  # delete irregular spread
   if(sum(stock$spread<0)>0) stock <- stock[-which(stock$spread<0),]  
   stock$Best_Bid_Size <- stock$Best_Bid_Size*100
   stock$Best_Offer_Size <- stock$Best_Offer_Size*100
@@ -42,7 +40,7 @@ for(kk in 1:length(char_name)){
   # the original bid/ask prices/ volume
   k <- 5 # we set the level of the variables, we have fixed the interval is 5 events
     
-#   for basic variables sets, data points come from the previous record points
+  # for basic variables sets, data points come from the previous record points
   # variable set 1--Prices and volume (1 level)
   features[[1]] <- matrix(cbind(unlist(data.table::shift(stock$Best_Bid_Price,1,type='lag'))),nrow=length(stock$Best_Bid_Price),ncol=1)
   
@@ -76,9 +74,9 @@ for(kk in 1:length(char_name)){
   
   features[[14]] <- rowSums(matrix(cbind(unlist(data.table::shift(as.data.table(stock$Best_Offer_Size),1:k,type='lag'))),nrow=length(stock$Best_Offer_Size),ncol=k),na.rm=T)
           
-#   features[[15]] <- matrix(cbind(unlist(data.table::shift(as.data.table(features[[5]]),0:9,type='lag'))),nrow=length(stock$Best_Bid_Size),ncol=k)  
-#     there are too many 0s in the sd of one window, so the variable is constructed based on two previous windows
-    features[[15]] <- matrix(cbind(unlist(data.table::shift(as.data.table(stock$midprice),1:(2*k),type='lag'))),nrow=length(stock$midprice),ncol=(2*k)) 
+
+  # there are too many 0s in the sd of one window, so the variable is constructed based on two previous windows
+  features[[15]] <- matrix(cbind(unlist(data.table::shift(as.data.table(stock$midprice),1:(2*k),type='lag'))),nrow=length(stock$midprice),ncol=(2*k)) 
   features[[15]] <- apply(features[[15]], 1, function(x) sd(x, na.rm=T))
   
   # variable 4--trade intensity (window slope) (only for window data) 
@@ -160,12 +158,6 @@ for(kk in 1:length(char_name)){
     features[[ii]] <- features[[ii]][-flag1]
     # features[[ii]] <- features[[ii]][which(1:length(features[[ii]])%%(k)==0)]
   }
-  
-  
-  # the best_bis_best_ask_spread_crossing we will have it as the return percentage, which means 
-  # best_bid_best_ask_spread_crossing= (bid_{t-1}-ask_{t-k})/ask_{t-k}
-  # we transform that in the first place
-  # and we also need to turn bid_ask_spread into a percentage using (ask_{t}-bid_{t})/midprice_{t}
 
 
   
