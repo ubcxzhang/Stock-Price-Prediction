@@ -45,8 +45,6 @@ for(ii in 1:length(char_name)){
   
   
   # delete first two rows for calculating the date
-  # !!ATTENTION: should vary for different stock 
-  # stock <- stock[-c(1,2),]
   # add the date variable
   load('./rda/date.rda')
   indicator <- stock$hour[2:nrow(stock)]/stock$hour[1:(nrow(stock)-1)]
@@ -62,7 +60,6 @@ for(ii in 1:length(char_name)){
   
   
   #1 Eliminate records beyond the exchange opening time, which is, from 9:30 am to 4 pm
-  #Since this is not time type data, 9:00 is hard to satisfied, break it into two steps
   if(length(which(stock$hour<9))) stock <- stock[-which(stock$hour<9),]
   if(length(which((stock$hour==9)&&(stock$min<30)))>0) stock <- stock[-which((stock$hour==9)&&(stock$min<30)),]
   if(length(which(stock$hour>16))>0) stock <- stock[-which(stock$hour>16),]
@@ -78,7 +75,7 @@ for(ii in 1:length(char_name)){
   
   #4 Exclude quotes when the quoted spread is greater than 25% of the quote midpoint 
   # or when the ask price is more than 150% of the bid price
-  #create variable midprice for later analysis
+  # create variable midprice for later analysis
   stock$midprice <- (stock$Best_Offer_Price+stock$Best_Bid_Price)/2
   if(length(which((stock$Best_Offer_Price-stock$Best_Bid_Price)>(stock$midprice*0.25)))>0) stock <- stock[-which((stock$Best_Offer_Price-stock$Best_Bid_Price)>(stock$midprice*0.25)),]
   if(length(which(stock$Best_Offer_Price>1.5*stock$Best_Bid_Price))>0) stock <- stock[-which(stock$Best_Offer_Price>1.5*stock$Best_Bid_Price),]
@@ -91,7 +88,7 @@ for(ii in 1:length(char_name)){
   # we compute the hourly price using group mean 
   longterm <- aggregate(midprice~date+hour,data=stock,mean)
   longterm <- longterm[order(longterm$date),]
-#   split the hourly data 
+  # split the hourly data 
   longterm2 <- split(longterm$midprice,longterm$date)
     
   # price is a variable that store all the hourly price and use NA as the missing values
@@ -101,12 +98,12 @@ for(ii in 1:length(char_name)){
   ##########################################################
   
   longterm3 <- longterm
-#   expect the first 8hrs of the first day, each hour we compute its 8 hrs sequence in var3 
+  # expect the first 8hrs of the first day, each hour we compute its 8 hrs sequence in var3 
   var3 <- vector()
   for(i in 1:((length(table(longterm3$date))*8-8))){
     var3[((i-1)*8+1):((i-1)*8+8)] <- window(price,start=i,end=(i+7),frequency=1)
   }
-#     construct variable to feed FPCA modelling
+  # construct variable to feed FPCA modelling
   longterm3d <- data.frame(midprice=var3,obs=rep(1:8,(length(table(longterm3$date))*8-8)))
   longterm3d$date <- rep(names(table(longterm3$date))[2:64],each=64)
   longterm3d$hr <- rep(rep(9:16,each=8),63)
@@ -122,13 +119,6 @@ for(ii in 1:length(char_name)){
   # to ensure FPCA can explain over 99.9%
   num <- min(which(cumsum(fpcaObjFlies3$lambda/sum(fpcaObjFlies3$lambda))>0.99))
   
-#   for(t in 1:num){
-#       fpca.test <- vector()
-#       for(i in 1:length(Flies3$Ly)){
-#       if(i==1){fpca.test[i]<- NA}
-#       else {fpca.test[i] <- fpcaObjFlies3$xiEst[i,t]}
-#     }
-    
      for(t in 1:num){
       fpca.test <- vector()
       fpca.test <- fpcaObjFlies3$xiEst[,t]
@@ -163,11 +153,6 @@ for(ii in 1:length(char_name)){
   # to ensure FPCA can explain over 99.9%
   num <- min(which(cumsum(fpcaObjFlies4$lambda/sum(fpcaObjFlies4$lambda))>0.99))
     
-#     for(t in 1:num){
-#       fpca.test <- vector()
-#       for(i in 1:length(Flies4$Ly)){
-      
-#      fpca.test[i] <- fpcaObjFlies4$xiEst[i,t]}
       for(t in 1:num){
      fpca.test <- vector()
      fpca.test <- fpcaObjFlies4$xiEst[,t]
