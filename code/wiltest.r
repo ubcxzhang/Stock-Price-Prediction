@@ -168,29 +168,14 @@ parameter <- function(modelsm,testsm,num,char){
   
   result <- list()
   # count the parameters
-#   print(paste0("The parameters/coefficients of ",char," > ",num, " are:"))
-#   print('--------------Stationary---------------')
-#   print(colnames(testsm[[1]])[which(as.numeric(table(Sfull_model_significance$i))>num)])
-#   print(as.numeric(table(Sfull_model_significance$i))[which(as.numeric(table(Sfull_model_significance$i))>num)])
-#   print(paragenerator_agg[paragenerator_agg$trend=='S',][which(as.numeric(table(Sfull_model_significance$i))>num),3])
   result[['S']] <- list(var=colnames(testsm[[1]])[which(as.numeric(table(Sfull_model_significance$i))>num)],
                         freq=as.numeric(table(Sfull_model_significance$i))[which(as.numeric(table(Sfull_model_significance$i))>num)],
                         coef=paragenerator_agg[paragenerator_agg$trend=='S',][which(as.numeric(table(Sfull_model_significance$i))>num),3])
-  
-  
-#   print('---------------Downwards----------------')
-#   print(colnames(testsm[[1]])[which(as.numeric(table(Dfull_model_significance$i))>num)])
-#   print(as.numeric(table(Dfull_model_significance$i))[which(as.numeric(table(Dfull_model_significance$i))>num)])
-#   print(paragenerator_agg[paragenerator_agg$trend=='D',][which(as.numeric(table(Dfull_model_significance$i))>num),3])
   
   result[['D']] <- list(var=colnames(testsm[[1]])[which(as.numeric(table(Dfull_model_significance$i))>num)],
                         freq=as.numeric(table(Dfull_model_significance$i))[which(as.numeric(table(Dfull_model_significance$i))>num)],
                         coef=paragenerator_agg[paragenerator_agg$trend=='D',][which(as.numeric(table(Dfull_model_significance$i))>num),3])
   
-#   print('----------------Upwards-----------------')
-#   print(colnames(testsm[[1]])[which(as.numeric(table(Ufull_model_significance$i))>num)])
-#   print(as.numeric(table(Ufull_model_significance$i))[which(as.numeric(table(Ufull_model_significance$i))>num)])
-#   print(paragenerator_agg[paragenerator_agg$trend=='U',][which(as.numeric(table(Ufull_model_significance$i))>num),3])
   result[['U']] <- list(var=colnames(testsm[[1]])[which(as.numeric(table(Ufull_model_significance$i))>num)],
                         freq=as.numeric(table(Ufull_model_significance$i))[which(as.numeric(table(Ufull_model_significance$i))>num)],
                         coef=paragenerator_agg[paragenerator_agg$trend=='U',][which(as.numeric(table(Ufull_model_significance$i))>num),3])
@@ -309,25 +294,7 @@ plot.FPCA1 <- function (x, openNewDev = FALSE, addLegend = TRUE, ...)
       newplt[2] <- newplt[1] + 0.85 * (newplt[2] - newplt[1])
       par(plt = newplt)
     }
-    # matplot(workGrid, fpcaObj$phi[, 2:k], type = "n", main = paste(collapse = "", 
-    #                                                                c("First ", as.character(k), " Eigenfunctions")), 
-    #         xlab = "time", ylab = "")
-    # 
-    # par(new=T)
-    # plot(c(workGrid[1],workGrid[length(workGrid)]), c(min(fpcaObj$phi[, 1]),max(fpcaObj$phi[, 1])),type='n',ylab='',xlab='',axes=F)
-    # lines(workGrid, fpcaObj$phi[,1],type='l')
-    # axis(side=4)
-    # abline(h = 0, col = "gray9")
-    # grid()
-    # matlines(workGrid, fpcaObj$phi[, 1:k])
-    # pars <- par()
-    # if (addLegend) {
-    #   legend("right", col = 1:k, lty = 1:k, legend = do.call(expression, 
-    #                                                          sapply(1:k, function(u) return(bquote(phi[.(u)])))), 
-    #          border = FALSE, xpd = TRUE, inset = -pars[["mai"]][4]/pars[["pin"]][1] * 
-    #            1.8, seg.len = 1.2)
-    # }
-    #par(mai=c(0.5,0.5,0.5,0.5))
+    
     matplot(workGrid, fpcaObj$phi[, 2:3], type = "n", main = paste(collapse = "", 
                                                                    c("First ", as.character(3), " Eigenfunctions")), 
             xlab = "time", ylab = "",las=1)
